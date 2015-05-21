@@ -5,7 +5,7 @@ public class Actor {
 	public string Name;
 	public enum Side { Left, Right, Center};
 	public float Height = 1.25f;
-	static public float MoveSpeed = 0.025f;
+	static public float MoveSpeed = 0.01f;
 	static public float ColorChangeSpeed = 0.025f;
 
 	public struct Emotion { public string Name; public string Path; };
