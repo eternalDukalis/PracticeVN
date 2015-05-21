@@ -16,6 +16,7 @@ public class GameManaging : MonoBehaviour {
 		oldBackground = GameObject.FindGameObjectWithTag ("oldBackground");
 		Background = thebackground.guiTexture.texture;
 		Actor.gm = this;
+		AudioStream.gm = this;
 	}
 	
 	// Update is called once per frame

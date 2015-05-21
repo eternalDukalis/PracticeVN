@@ -24,6 +24,10 @@ public class Scenario : MonoBehaviour {
 	Actor Helen;
 	Actor Uliana;
 
+	//Audiostreams
+	AudioStream Environment;
+	AudioStream Music;
+	AudioStream Effects;
 	void Start () {
 		Alice = new Actor ("Алиса","Assets/Graphics/Sprites/dv");
 		Electronic = new Actor ("Электроник","Assets/Graphics/Sprites/el");
@@ -34,25 +38,32 @@ public class Scenario : MonoBehaviour {
 		Slavya = new Actor ("Славя","Assets/Graphics/Sprites/sl");
 		Helen = new Actor ("Лена","Assets/Graphics/Sprites/un");
 		Uliana = new Actor ("Ульяна","Assets/Graphics/Sprites/us");
+
+		Environment = new AudioStream ("Assets/Sounds/Environment/",true);
+		Music = new AudioStream ("Assets/Sounds/Music/",true);
+		Effects = new AudioStream ("Assets/Sounds/Effects/",false);
 	}
 
 	IEnumerator TheScene()
 	{
+		Environment.Play ("water");
+		Music.Play ("Confession");
 		PushText ("Звёзды..."); yield return StartCoroutine (WaitNext ());
 		PushText ("Интересно, сколько же, в конце концов, звёзд мерцают на нашем небосклоне, волей или неволей заставляя людей погружаться в собственные мысли или просто глупо глазеть наверх? "); yield return StartCoroutine (WaitNext ());
 		PushText ("Каждый, кто самостоятельно пытался узнать ответ на этот вопрос, неизбежно терпел неудачу, и это каждый знает. "); yield return StartCoroutine (WaitNext ());
 		PushText ("Так почему же…"); yield return StartCoroutine (WaitNext ());
-		PushText ("Семьдесят два","Семён"); yield return StartCoroutine (WaitNext ());
+		PushText ("Семьдесят два...","Семён"); yield return StartCoroutine (WaitNext ());
 		PushText ("И вроде бы просто огромные газовые шары, а иногда кажутся живыми…"); yield return StartCoroutine (WaitNext ());
-		PushText ("Семьдесят три","Семён"); yield return StartCoroutine (WaitNext ());
+		PushText ("Семьдесят три...","Семён"); yield return StartCoroutine (WaitNext ());
 		PushText ("Может, я просто схожу с ума, но они даже вроде иногда подмигивают мне, словно зовут уютно расположиться среди них"); yield return StartCoroutine (WaitNext ());
-		PushText ("Семьдесят четыре", "Семён"); yield return StartCoroutine (WaitNext ());
+		PushText ("Семьдесят четыре...", "Семён"); yield return StartCoroutine (WaitNext ());
 		PushText ("Я, может, и сам бы рад, но вот только…"); yield return StartCoroutine (WaitNext ());
 		PushText ("И чем это мы тут занимаемся?","Алиса"); yield return StartCoroutine (WaitNext ());
+		Music.Stop();
 		ChangeBackground (Boathouse_night); yield return StartCoroutine (WaitNext ());
 		Alice.SetSprite (Actor.Side.Right);
 		Alice.ChangeSprite ("smile");
-		PushText ("Да в общем-то, ничем я постыдным не занимался, но всё же подобные размышления для меня достаточно интимны, и своё смущение я решил скрыть враждебностью."); yield return StartCoroutine (WaitNext ());
+		PushText ("Да в общем-то, ничем я постыдным не занимался, но всё же счёл это за вероломное вторжение в своё личное пространство."); yield return StartCoroutine (WaitNext ());
 		PushText ("Двачевская. Почему бы тебе не скрыться из виду и не сдохнуть?", "Семён"); yield return StartCoroutine (WaitNext ());
 		Alice.ChangePosition (Actor.Side.Center);
 		Alice.ChangeSprite ("surprise");
@@ -67,6 +78,7 @@ public class Scenario : MonoBehaviour {
 		Alice.ChangeSprite ("normal");
 		PushText ("Кстати, говорят, завтра новый пионер приезжает.","Алиса"); yield return StartCoroutine (WaitNext ());
 		PushText ("Интересная ситуация. Так пионер или пионерка?","Семён"); yield return StartCoroutine (WaitNext ());
+		PushText ("Будто мне есть до этого дело."); yield return StartCoroutine (WaitNext ());
 		Alice.ChangeSprite ("laugh");
 		PushText ("Ха! Так вот что тебя интересует в первую очередь! Не знаю уж, не спрашивала. А что, уже надеешься на что-то?","Алиса"); yield return StartCoroutine (WaitNext ());
 		PushText ("Нет уж, ты моя единственная любовь до гроба.","Семён"); yield return StartCoroutine (WaitNext ());
@@ -77,8 +89,10 @@ public class Scenario : MonoBehaviour {
 		PushText ("Ага, до завтра.","Семён"); yield return StartCoroutine (WaitNext ());
 		Alice.Delete (Actor.Side.Left);
 		PushText ("Утомляет это девица, но иногда с ней весело."); yield return StartCoroutine (WaitNext ());
-		PushText ("Чтоб не наживать ещё больше проблем, я побрёл к своему домику."); yield return StartCoroutine (WaitNext ());
+		PushText ("Чтоб не наживать себе ещё больше проблем, я побрёл к своему домику."); yield return StartCoroutine (WaitNext ());
 		ChangeBackground (Square_night); yield return StartCoroutine (WaitNext ());
+		Music.Play ("Silhouette In Sunset");
+		Environment.ChangeSound ("grasshopers");
 		PushText ("И снова в голове начали возникать увлекательные (идиотские, точнее, мысли)."); yield return StartCoroutine (WaitNext ());
 		PushText ("Интересно, если бы я прямо в этот момент писал книгу о себе, то что именно писал?"); yield return StartCoroutine (WaitNext ());
 		PushText ("Привет, меня зовут Семён! Я живу в городе Пхе, закончил школу Кхе, теперь же родители отправили меня против моей же воли в какой-то сраный лагерь."); yield return StartCoroutine (WaitNext ());
@@ -99,12 +113,15 @@ public class Scenario : MonoBehaviour {
 		PushText ("Что ж, оставлю свою воображаемую автобиографию на потом, а сейчас нужно немножко повоевать с вожатой за право на жизнь."); yield return StartCoroutine (WaitNext ());
 		PushText ("Я аккуратно вошёл в домик и…"); yield return StartCoroutine (WaitNext ());
 		ChangeBackground (House_of_mt_night_in2); yield return StartCoroutine (WaitNext ());
-		PushText ("Спит","Семён"); yield return StartCoroutine (WaitNext ());
+		Environment.Stop ();
+		Effects.Play ("door");
+		PushText ("Спит.","Семён"); yield return StartCoroutine (WaitNext ());
 		PushText ("Так вот она и нашла пропавшего пионера. Всем пример, ничего не скажешь…"); yield return StartCoroutine (WaitNext ());
 		PushText ("Не мешкая, я разделся и залез в кровать. "); yield return StartCoroutine (WaitNext ());
 		PushText ("Вопреки своим собственным традициям, я заснул почти сразу."); yield return StartCoroutine (WaitNext ());
 		PushText ("Завтра, наверно, будет такой же день, как и остальные."); yield return StartCoroutine (WaitNext ());
 		PushText ("Или нет?"); yield return StartCoroutine (WaitNext ());
+		Music.Stop ();
 	}
 
 	// Update is called once per frame
@@ -117,11 +134,13 @@ public class Scenario : MonoBehaviour {
 
 	void PushText(string text)
 	{
+		text = text.Insert (0, "\t");
 		StartCoroutine (GameManaging.PushText (text));
 	}
 	
 	void PushText(string text, string author)
 	{
+		text = text.Insert (0, "\t");
 		StartCoroutine (GameManaging.PushText (text,author));
 	}
 
