@@ -20,6 +20,11 @@ public class Click : MonoBehaviour {
 			if ((Input.GetKeyDown(KeyCode.Mouse0)) && (target.GetScreenRect().Contains(Input.mousePosition)))
 				return true;
 		}
+		if (Application.platform==RuntimePlatform.Android)
+		{
+			if ((Input.GetKeyDown(KeyCode.Mouse0)) && (target.GetScreenRect().Contains(Input.mousePosition)))
+				return true;
+		}
 		return false;
 	}
 
@@ -28,6 +33,11 @@ public class Click : MonoBehaviour {
 		if ((Application.platform==RuntimePlatform.WindowsEditor) || (Application.platform==RuntimePlatform.WindowsPlayer))
 		{
 			if ((Input.GetKey(KeyCode.Mouse0)) && (target.GetScreenRect().Contains(Input.mousePosition)))
+				return true;
+		}
+		if (Application.platform==RuntimePlatform.Android)
+		{
+			if ((Input.GetKeyDown(KeyCode.Mouse0)) && (target.GetScreenRect().Contains(Input.mousePosition)))
 				return true;
 		}
 		return false;
