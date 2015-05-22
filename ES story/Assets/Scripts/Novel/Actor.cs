@@ -4,7 +4,7 @@ using System.Collections;
 public class Actor {
 	public string Name;
 	public enum Side { Left, Right, Center};
-	public float Height = 1.25f;
+	public float Height = 1.5f;
 	static public float MoveSpeed = 0.01f;
 	static public float ColorChangeSpeed = 0.025f;
 

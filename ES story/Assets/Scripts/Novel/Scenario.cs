@@ -135,12 +135,14 @@ public class Scenario : MonoBehaviour {
 	void PushText(string text)
 	{
 		text = text.Insert (0, "\t");
+		GameManaging.stText.AddString (text, "");
 		StartCoroutine (GameManaging.PushText (text));
 	}
 	
 	void PushText(string text, string author)
 	{
 		text = text.Insert (0, "\t");
+		GameManaging.stText.AddString (text, author);
 		StartCoroutine (GameManaging.PushText (text,author));
 	}
 
@@ -151,7 +153,7 @@ public class Scenario : MonoBehaviour {
 
 	IEnumerator WaitNext()
 	{
-		while (!GameManaging.CanDoNext) {
+		while ((!GameManaging.CanDoNext)) {
 			yield return null;
 		}
 	}
