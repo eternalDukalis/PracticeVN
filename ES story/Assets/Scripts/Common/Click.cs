@@ -37,7 +37,7 @@ public class Click : MonoBehaviour {
 		}
 		if (Application.platform==RuntimePlatform.Android)
 		{
-			if ((Input.GetKeyDown(KeyCode.Mouse0)) && (target.GetScreenRect().Contains(Input.mousePosition)))
+			if ((Input.GetKey(KeyCode.Mouse0)) && (target.GetScreenRect().Contains(Input.mousePosition)))
 				return true;
 		}
 		return false;

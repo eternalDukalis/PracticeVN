@@ -5,9 +5,7 @@ public class AudioStream {
 	GameObject MainSound;
 	GameObject OldSound;
 	bool itsloop = false;
-
-	struct SingleSound { public string Name; public string Path; };
-	SingleSound[] Library;
+	string spath;
 
 	static public float FadeOutSpeed = 0.01f;
 	static public GameManaging gm;
@@ -17,29 +15,29 @@ public class AudioStream {
 
 	public AudioStream(string path, bool isLooped)
 	{
-		string[] cursound = System.IO.Directory.GetFiles (path,"*.mp3");
-		Library = new SingleSound[cursound.Length];
-		for (int i=0; i<cursound.Length; i++) 
-		{
-			Library[i].Name = cursound[i].Remove(cursound[i].Length-4).Remove(0,path.Length);
-			Library[i].Path = cursound[i];
-		}
+		spath = path;
 		itsloop = isLooped;
 	}
 
 	public void Play(string title)
 	{
-		for (int i=0; i<Library.Length; i++) 
-			if (Library [i].Name == title) 
-			{
-				//MonoBehaviour.Destroy(MainSound);
-				MainSound = new GameObject(Library[i].Name,typeof(AudioSource));
-				MainSound.audio.playOnAwake = false;
-				MainSound.audio.clip = Resources.LoadAssetAtPath<AudioClip>(Library[i].Path);
-				MainSound.transform.position = new Vector3(0,0,-8);
-				MainSound.audio.loop = itsloop;
-				break;
-			}
+		gm.StartCoroutine (play (title));
+	}
+
+	private IEnumerator play(string title)
+	{
+
+		//MonoBehaviour.Destroy(MainSound);
+		MainSound = new GameObject(title,typeof(AudioSource));
+		MainSound.audio.playOnAwake = false;
+		MainSound.audio.clip = Resources.Load<AudioClip>(spath+title);
+		MainSound.transform.position = new Vector3(0,0,-8);
+		MainSound.audio.loop = itsloop;
+		while (!MainSound.audio.clip.isReadyToPlay)
+		{
+			Debug.Log("lil");
+			yield return null;
+		}
 		MainSound.audio.Play();
 	}
 

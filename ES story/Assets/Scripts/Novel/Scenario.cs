@@ -4,14 +4,13 @@ using System.Collections;
 public class Scenario : MonoBehaviour {
 
 	private bool EndOf = false;
-
 	//Backgrounds
-	private string Stars = "Assets/Graphics/Backgrounds/stars.jpg";
-	private string Boathouse_night = "Assets/Graphics/Backgrounds/ext_boathouse_night.jpg";
-	private string House_of_mt_night = "Assets/Graphics/Backgrounds/ext_house_of_mt_night_without_light.jpg";
-	private string Square_night = "Assets/Graphics/Backgrounds/ext_square_night.jpg";
-	private string House_of_mt_night_in2 = "Assets/Graphics/Backgrounds/int_house_of_mt_night2.jpg";
-	private string Club_screen = "Assets/Graphics/Backgrounds/d5_clubs_robot.jpg";
+	private string Stars;
+	private string Boathouse_night;
+	private string House_of_mt_night;
+	private string Square_night;
+	private string House_of_mt_night_in2;
+	private string Club_screen;
 
 	//Actors
 	Actor Alice;
@@ -29,19 +28,26 @@ public class Scenario : MonoBehaviour {
 	AudioStream Music;
 	AudioStream Effects;
 	void Start () {
-		Alice = new Actor ("Алиса","Assets/Graphics/Sprites/dv");
-		Electronic = new Actor ("Электроник","Assets/Graphics/Sprites/el");
-		Miku = new Actor ("Мику","Assets/Graphics/Sprites/mi");
-		Olga = new Actor ("Ольга Дмитриевна","Assets/Graphics/Sprites/mt");
-		Zhenya = new Actor ("Женя","Assets/Graphics/Sprites/mz");
-		Shurik = new Actor ("Шурик","Assets/Graphics/Sprites/sh");
-		Slavya = new Actor ("Славя","Assets/Graphics/Sprites/sl");
-		Helen = new Actor ("Лена","Assets/Graphics/Sprites/un");
-		Uliana = new Actor ("Ульяна","Assets/Graphics/Sprites/us");
+		Stars = "stars";
+		Boathouse_night = "ext_boathouse_night";
+		House_of_mt_night = "ext_house_of_mt_night_without_light";
+		Square_night = "ext_square_night";
+		House_of_mt_night_in2 = "int_house_of_mt_night2";
+		Club_screen = "d5_clubs_robot";
 
-		Environment = new AudioStream ("Assets/Sounds/Environment/",true);
-		Music = new AudioStream ("Assets/Sounds/Music/",true);
-		Effects = new AudioStream ("Assets/Sounds/Effects/",false);
+		Alice = new Actor ("Алиса","dv");
+		Electronic = new Actor ("Электроник","el");
+		Miku = new Actor ("Мику","mi");
+		Olga = new Actor ("Ольга Дмитриевна","mt");
+		Zhenya = new Actor ("Женя","mz");
+		Shurik = new Actor ("Шурик","sh");
+		Slavya = new Actor ("Славя","sl");
+		Helen = new Actor ("Лена","un");
+		Uliana = new Actor ("Ульяна","us");
+
+		Environment = new AudioStream ("Sounds/Environment/",true);
+		Music = new AudioStream ("Sounds/Music/",true);
+		Effects = new AudioStream ("Sounds/Effects/",false);
 	}
 
 	IEnumerator TheScene()
@@ -61,30 +67,29 @@ public class Scenario : MonoBehaviour {
 		PushText ("И чем это мы тут занимаемся?","Алиса"); yield return StartCoroutine (WaitNext ());
 		Music.Stop();
 		ChangeBackground (Boathouse_night); yield return StartCoroutine (WaitNext ());
-		Alice.SetSprite (Actor.Side.Right);
-		Alice.ChangeSprite ("smile");
+		Alice.SetSprite (Actor.Side.Right,"4smile");
 		PushText ("Да в общем-то, ничем я постыдным не занимался, но всё же счёл это за вероломное вторжение в своё личное пространство."); yield return StartCoroutine (WaitNext ());
 		PushText ("Двачевская. Почему бы тебе не скрыться из виду и не сдохнуть?", "Семён"); yield return StartCoroutine (WaitNext ());
 		Alice.ChangePosition (Actor.Side.Center);
-		Alice.ChangeSprite ("surprise");
+		Alice.ChangeSprite ("1surprise");
 		PushText ("Хм. Не слишком ли это грубо даже для тебя?", "Алиса"); yield return StartCoroutine (WaitNext ());
 		PushText ("По-твоему, я всем своим видом показываю, что горю желанием общаться с тобой в данный момент?","Семён"); yield return StartCoroutine (WaitNext ());
-		Alice.ChangeSprite ("normal");
+		Alice.ChangeSprite ("4normal");
 		PushText ("Ну-ну, язви дальше. Я же пришла сказать, что Ольга Дмитриевна давно уж тебя обыскалась. Предупредить хотела. А ты тут…","Алиса"); yield return StartCoroutine (WaitNext ());
 		PushText ("Хм. И правда, что-то перегнул."); yield return StartCoroutine (WaitNext ());
 		PushText ("Ладно, прости.","Семён"); yield return StartCoroutine (WaitNext ());
-		Alice.ChangeSprite ("grin");
+		Alice.ChangeSprite ("2grin");
 		PushText ("Да чего уж там. С кем не бывает. ","Алиса"); yield return StartCoroutine (WaitNext ());
-		Alice.ChangeSprite ("normal");
+		Alice.ChangeSprite ("4normal");
 		PushText ("Кстати, говорят, завтра новый пионер приезжает.","Алиса"); yield return StartCoroutine (WaitNext ());
 		PushText ("Интересная ситуация. Так пионер или пионерка?","Семён"); yield return StartCoroutine (WaitNext ());
 		PushText ("Будто мне есть до этого дело."); yield return StartCoroutine (WaitNext ());
-		Alice.ChangeSprite ("laugh");
+		Alice.ChangeSprite ("4laugh");
 		PushText ("Ха! Так вот что тебя интересует в первую очередь! Не знаю уж, не спрашивала. А что, уже надеешься на что-то?","Алиса"); yield return StartCoroutine (WaitNext ());
 		PushText ("Нет уж, ты моя единственная любовь до гроба.","Семён"); yield return StartCoroutine (WaitNext ());
-		Alice.ChangeSprite ("shocked");
+		Alice.ChangeSprite ("1shocked");
 		PushText ("...","Алиса"); yield return StartCoroutine (WaitNext ());
-		Alice.ChangeSprite ("angry");
+		Alice.ChangeSprite ("5angry");
 		PushText ("Ха-ха-ха, как смешно. Ладно, я к себе. Увидимся.","Алиса"); yield return StartCoroutine (WaitNext ());
 		PushText ("Ага, до завтра.","Семён"); yield return StartCoroutine (WaitNext ());
 		Alice.Delete (Actor.Side.Left);

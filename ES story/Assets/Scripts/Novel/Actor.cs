@@ -7,15 +7,11 @@ public class Actor {
 	public float Height = 1.5f;
 	static public float MoveSpeed = 0.01f;
 	static public float ColorChangeSpeed = 0.025f;
+	static public string LocalPath = "Graphics/Sprites/";
 
-	public struct Emotion { public string Name; public string Path; };
-	public struct Body { public string BodyPath; public Emotion[] Emotions; };
-	public Body[] Sprites;
-
+	private string apath;
 	private GameObject MainSprite;
 	private GameObject EmotionSprite;
-	private string CurrentSprite;
-	private string CurrentEmotion;
 	private bool isActive = false;
 	static public GameManaging gm;
 
@@ -27,40 +23,23 @@ public class Actor {
 	public Actor(string name, string path)
 	{
 		Name = name;
-		LoadSprites (path);
-		CurrentSprite = Sprites [0].BodyPath;
-		CurrentEmotion = Sprites [0].Emotions [0].Path;
+		apath = path;
 	}
 
 	public void ChangeSprite (string title)
 	{
-		for (int i=0; i<Sprites.Length; i++)
-		{
-			for (int j=0; j<Sprites[i].Emotions.Length; j++)
-			{
-				if (Sprites[i].Emotions[j].Name==title)
-				{
-					CurrentSprite = Sprites[i].BodyPath;
-					CurrentEmotion = Sprites[i].Emotions[j].Path;
-					if (isActive)
-					{
-						MainSprite.guiTexture.texture = Resources.LoadAssetAtPath<Texture> (CurrentSprite);
-						EmotionSprite.guiTexture.texture = Resources.LoadAssetAtPath<Texture> (CurrentEmotion);
-					}
-					return;
-				}
-			}
-		}
+		MainSprite.guiTexture.texture = Resources.Load<Texture>(LocalPath + apath + "/Bodies/" + title[0]);
+		EmotionSprite.guiTexture.texture = Resources.Load<Texture>(LocalPath + apath + "/Emotions/" + title);
 	}
 	
-	public void SetSprite(Side position)
+	public void SetSprite(Side position, string emotion)
 	{
-		gm.StartCoroutine (setSprite (position));
+		gm.StartCoroutine (setSprite (position, emotion));
 	}
 	
-	public void SetSprite(Side position, Side appearanceSide)
+	public void SetSprite(Side position, string emotion, Side appearanceSide)
 	{
-		gm.StartCoroutine (setSprite (position,appearanceSide));
+		gm.StartCoroutine (setSprite (position,emotion,appearanceSide));
 	}
 	
 	public void Delete()
@@ -78,7 +57,7 @@ public class Actor {
 		gm.StartCoroutine (changePosition (targetPosition));
 	}
 	
-	private IEnumerator setSprite(Side position)
+	private IEnumerator setSprite(Side position, string emotion)
 	{
 		MonoBehaviour.Destroy (MainSprite);
 		MainSprite = new GameObject(string.Format("{0}_main",Name),typeof(GUITexture));
@@ -99,8 +78,8 @@ public class Actor {
 			MainSprite.transform.position = new Vector3(0.8f,0.25f,0);
 			break;
 		}
-		MainSprite.guiTexture.texture = Resources.LoadAssetAtPath<Texture> (CurrentSprite);
-		EmotionSprite.guiTexture.texture = Resources.LoadAssetAtPath<Texture> (CurrentEmotion);
+		MainSprite.guiTexture.texture = Resources.Load<Texture>(LocalPath + apath + "/Bodies/" + emotion[0]);
+		EmotionSprite.guiTexture.texture = Resources.Load<Texture>(LocalPath + apath + "/Emotions/" + emotion);
 		EmotionSprite.transform.position += new Vector3 (0, 0.5f-(float)MainSprite.guiTexture.texture.width/2/MainSprite.guiTexture.texture.height, 0.25f);
 		MainSprite.transform.localScale = new Vector3 (Height*MainSprite.guiTexture.texture.width*Screen.height/MainSprite.guiTexture.texture.height/Screen.width, Height, 0);
 		EmotionSprite.transform.localScale = new Vector3 (1, (float)MainSprite.guiTexture.texture.width/MainSprite.guiTexture.texture.height, 0);
@@ -112,7 +91,7 @@ public class Actor {
 		yield return null;
 	}
 	
-	private IEnumerator setSprite(Side position, Side appearanceSide)
+	private IEnumerator setSprite(Side position, string emotion, Side appearanceSide)
 	{
 		MonoBehaviour.Destroy (MainSprite);
 		MainSprite = new GameObject(string.Format("{0}_main",Name),typeof(GUITexture));
@@ -146,8 +125,8 @@ public class Actor {
 			MainSprite.transform.position = new Vector3(1.2f,0.25f,0);
 			break;
 		}
-		MainSprite.guiTexture.texture = Resources.LoadAssetAtPath<Texture> (CurrentSprite);
-		EmotionSprite.guiTexture.texture = Resources.LoadAssetAtPath<Texture> (CurrentEmotion);
+		MainSprite.guiTexture.texture = Resources.Load<Texture>(LocalPath + apath + "/Bodies/" + emotion[0]);
+		EmotionSprite.guiTexture.texture = Resources.Load<Texture>(LocalPath + apath + "/Emotions/" + emotion);
 		EmotionSprite.transform.position += new Vector3 (0, 0.5f-(float)MainSprite.guiTexture.texture.width/2/MainSprite.guiTexture.texture.height, 0.25f);
 		MainSprite.transform.localScale = new Vector3 (Height*MainSprite.guiTexture.texture.width*Screen.height/MainSprite.guiTexture.texture.height/Screen.width, Height, 0);
 		EmotionSprite.transform.localScale = new Vector3 (1, (float)MainSprite.guiTexture.texture.width/MainSprite.guiTexture.texture.height, 0);
@@ -222,23 +201,6 @@ public class Actor {
 		while (Mathf.Abs(finalPosition-MainSprite.transform.position.x)>MoveSpeed) {
 			MainSprite.transform.position += new Vector3(Direction*MoveSpeed,0,0);
 			yield return null;
-		}
-	}
-
-	private void LoadSprites(string path)
-	{
-		int n = System.IO.Directory.GetFiles (path + "/Bodies","*.png").Length;
-		Sprites = new Body[n];
-		for (int i=1; i<=n; i++) 
-		{
-			Sprites[i-1].BodyPath = path+"/Bodies/"+i.ToString()+".png";
-			string[] curemo = System.IO.Directory.GetFiles(path+"/Emotions",i.ToString()+"*.png");
-			Sprites[i-1].Emotions = new Emotion[curemo.Length];
-			for (int j=0; j<curemo.Length; j++)
-			{
-				Sprites[i-1].Emotions[j].Name = curemo[j].Remove(curemo[j].Length-4).Remove(0,(path+"Emotions/1").Length+1);
-				Sprites[i-1].Emotions[j].Path = curemo[j];
-			}
 		}
 	}
 }

@@ -19,13 +19,18 @@ public class GameManaging : MonoBehaviour {
 	static GameObject SkipArrow;
 	static Color StandartColor;
 	static public float SkipInterval = 1;
-	// Use this for initialization
+	static public bool AutoMode = false;
+	static public float AutoSpeed = 0.03f;
+	static public float AutoInterval = 1;
+	static public GameObject AutoButton;
+	static private string BackgroundPath = "Graphics/Backgrounds/";
 	void Start () {
 		thebackground = GameObject.FindGameObjectWithTag ("Background");
 		oldBackground = GameObject.FindGameObjectWithTag ("oldBackground");
 		LeftArrow = GameObject.FindGameObjectWithTag ("LeftArrow");
 		RightArrow = GameObject.FindGameObjectWithTag ("RightArrow");
 		SkipArrow = GameObject.FindGameObjectWithTag ("Skip");
+		AutoButton = GameObject.FindGameObjectWithTag ("AutoCircle");
 		Background = thebackground.guiTexture.texture;
 		Actor.gm = this;
 		AudioStream.gm = this;
@@ -69,6 +74,13 @@ public class GameManaging : MonoBehaviour {
 				BackMode = false;
 			}
 		}
+		if ((!BackMode) && (PressAuto()))
+			AutoMode = !AutoMode;
+		if (AutoMode)
+		{
+			if ((PressForward()) || (PressLeft()) || (PressRight()) || (PressSkip()))
+				AutoMode = false;
+		}
 	}
 
 	void OnGUI()
@@ -103,9 +115,14 @@ public class GameManaging : MonoBehaviour {
 			yield return null;
 		}
 		yield return null;
-		while (((!PressForward()) && (!PressSkip())) || (BackMode)) {
-			yield return null;
+		if (!AutoMode)
+		{
+			while (((!PressForward()) && (!PressSkip()) && (!PressAuto())) || (BackMode)) {
+				yield return null;
+			}
 		}
+		else
+			yield return new WaitForSeconds(AutoInterval + Text.Length*AutoSpeed);
 		CanDoNext = true;
 	}
 	
@@ -130,9 +147,14 @@ public class GameManaging : MonoBehaviour {
 			yield return null;
 		}
 		yield return null;
-		while (((!PressForward()) && (!PressSkip())) || (BackMode)) {
-			yield return null;
+		if (!AutoMode)
+		{
+			while (((!PressForward()) && (!PressSkip()) && (!PressAuto())) || (BackMode)) {
+				yield return null;
+			}
 		}
+		else
+			yield return new WaitForSeconds(AutoInterval + Text.Length*AutoSpeed);
 		CanDoNext = true;
 	}
 
@@ -142,7 +164,7 @@ public class GameManaging : MonoBehaviour {
 		CanDoNext = false;
 		oldBackground.guiTexture.color = thebackground.guiTexture.color;
 		oldBackground.guiTexture.texture = thebackground.guiTexture.texture;
-		GameManaging.Background = Resources.LoadAssetAtPath<Texture> (path);
+		GameManaging.Background = Resources.Load<Texture>(BackgroundPath + path);
 		while (oldBackground.guiTexture.color.a>=0) {
 			if (((PressForward()) || (PressSkip())) && (oldBackground.guiTexture.color.a<0.5f) && (!BackMode))
 			{
@@ -181,6 +203,13 @@ public class GameManaging : MonoBehaviour {
 		{
 			return true;
 		}
+		return false;
+	}
+
+	static public bool PressAuto()
+	{
+		if ((Input.GetKeyDown(KeyCode.A)) || (Click.OnClick(AutoButton.guiTexture)))
+			return true;
 		return false;
 	}
 
