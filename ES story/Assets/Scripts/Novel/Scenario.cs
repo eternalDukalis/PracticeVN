@@ -127,6 +127,8 @@ public class Scenario : MonoBehaviour {
 		PushText ("Завтра, наверно, будет такой же день, как и остальные."); yield return StartCoroutine (WaitNext ());
 		PushText ("Или нет?"); yield return StartCoroutine (WaitNext ());
 		Music.Stop ();
+		ShowDay ("ДЕНЬ 1", Stars); yield return StartCoroutine (WaitNext ());
+		PushText ("Будильник, как и положено, прозвенел в 7 утра."); yield return StartCoroutine (WaitNext ());
 	}
 
 	// Update is called once per frame
@@ -154,6 +156,11 @@ public class Scenario : MonoBehaviour {
 	void ChangeBackground(string path)
 	{
 		StartCoroutine (GameManaging.ChangeBackground (path));
+	}
+
+	void ShowDay(string whattoshow, string initialBackground)
+	{
+		StartCoroutine (GameManaging.ShowDay (whattoshow, initialBackground));
 	}
 
 	IEnumerator WaitNext()

@@ -24,6 +24,7 @@ public class GameManaging : MonoBehaviour {
 	static public float AutoInterval = 1;
 	static public GameObject AutoButton;
 	static private string BackgroundPath = "Graphics/Backgrounds/";
+	static public float FadeSpeed = 0.035f;
 	void Start () {
 		thebackground = GameObject.FindGameObjectWithTag ("Background");
 		oldBackground = GameObject.FindGameObjectWithTag ("oldBackground");
@@ -171,6 +172,51 @@ public class GameManaging : MonoBehaviour {
 				oldBackground.guiTexture.color = new Color(0,0,0,0);
 			}
 			oldBackground.guiTexture.color -= new Color(0,0,0,0.01f);
+			yield return null;
+		}
+		CanDoNext = true;
+	}
+
+	static public IEnumerator ShowDay(string whattoshow, string initialBackground)
+	{
+		float TimeToShow = 3;
+		float fontSizeMulitplier = 0.15f;
+		CanDoNext = false;
+		Text = "";
+		Author = "";
+		GameObject DayBack = new GameObject("dayback",typeof(GUITexture));
+		DayBack.guiTexture.texture = Resources.Load<Texture>(BackgroundPath + initialBackground);
+		DayBack.transform.position = new Vector3 (0.5f, 0.5f, 15);
+		DayBack.transform.localScale = new Vector3 (1, 1, 0);
+		DayBack.guiTexture.color = new Color (0, 0, 0, 0);
+		while (DayBack.guiTexture.color.a<1)
+		{
+			DayBack.guiTexture.color += new Color(0,0,0,FadeSpeed);
+			yield return null;
+		}
+		GameObject DayText = new GameObject ("daytext", typeof(GUIText));
+		DayText.guiText.color = new Color (1, 1, 1, 0);
+		DayText.transform.position = new Vector3 (0.5f, 0.5f, 16);
+		DayText.guiText.alignment = TextAlignment.Center;
+		DayText.guiText.anchor = TextAnchor.MiddleCenter;
+		DayText.guiText.fontStyle = FontStyle.Bold;
+		DayText.guiText.fontSize = (int)(Screen.height * fontSizeMulitplier);
+		DayText.guiText.text = whattoshow;
+		while (DayText.guiText.color.a<1)
+		{
+			DayText.guiText.color += new Color(0,0,0,FadeSpeed);
+			yield return null;
+		}
+		Background = Resources.Load<Texture>(BackgroundPath + initialBackground);
+		yield return new WaitForSeconds(TimeToShow);
+		while (DayText.guiText.color.a>0)
+		{
+			DayText.guiText.color -= new Color(0,0,0,FadeSpeed);
+			yield return null;
+		}
+		while (DayBack.guiTexture.color.a>0)
+		{
+			DayBack.guiTexture.color -= new Color(0,0,0,FadeSpeed);
 			yield return null;
 		}
 		CanDoNext = true;
