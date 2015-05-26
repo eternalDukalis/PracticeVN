@@ -5,8 +5,10 @@ public class Actor {
 	public string Name;
 	public enum Side { Left, Right, Center};
 	public float Height = 1.5f;
-	static public float MoveSpeed = 0.01f;
-	static public float ColorChangeSpeed = 0.025f;
+	static public float SpeedStep = 0.01f;
+	static public float FadeStep = 0.025f;
+	static private float MoveSpeed = 0.01f;
+	static private float ColorChangeSpeed = 0.025f;
 	static public string LocalPath = "Graphics/Sprites/";
 
 	private string apath;
@@ -34,26 +36,48 @@ public class Actor {
 	
 	public void SetSprite(Side position, string emotion)
 	{
+		if (GameManaging.PressSkip())
+			ColorChangeSpeed = FadeStep*10;
+		else
+			ColorChangeSpeed = FadeStep;
 		gm.StartCoroutine (setSprite (position, emotion));
 	}
 	
 	public void SetSprite(Side position, string emotion, Side appearanceSide)
 	{
+		if (GameManaging.PressSkip())
+			MoveSpeed = SpeedStep*3;
+		else
+			MoveSpeed = SpeedStep;
 		gm.StartCoroutine (setSprite (position,emotion,appearanceSide));
 	}
 	
 	public void Delete()
 	{
+		if (GameManaging.PressSkip())
+			ColorChangeSpeed = FadeStep*10;
+		else
+			ColorChangeSpeed = FadeStep;
 		gm.StartCoroutine (delete ());
 	}
 	
 	public void Delete(Side disappearanceSide)
 	{
+		if (GameManaging.PressSkip())
+			MoveSpeed = SpeedStep*3;
+		else
+			MoveSpeed = SpeedStep;
+		MainSprite.transform.position += new Vector3 (0, 0, -1);
+		EmotionSprite.transform.position += new Vector3 (0, 0, -1);
 		gm.StartCoroutine (delete (disappearanceSide));
 	}
 	
 	public void ChangePosition(Side targetPosition)
 	{
+		if (GameManaging.PressSkip())
+			MoveSpeed = SpeedStep*3;
+		else
+			MoveSpeed = SpeedStep;
 		gm.StartCoroutine (changePosition (targetPosition));
 	}
 	

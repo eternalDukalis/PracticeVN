@@ -3,7 +3,7 @@ using System.Collections;
 
 public class GameManaging : MonoBehaviour {
 
-	static public string Text = "default";
+	static public string Text = "";
 	static public string Author = "";
 	static public Texture Background;
 	static public bool CanDoNext = true;
@@ -25,6 +25,7 @@ public class GameManaging : MonoBehaviour {
 	static public GameObject AutoButton;
 	static private string BackgroundPath = "Graphics/Backgrounds/";
 	static public float FadeSpeed = 0.035f;
+	static public bool BloodMode = false;
 	void Start () {
 		thebackground = GameObject.FindGameObjectWithTag ("Background");
 		oldBackground = GameObject.FindGameObjectWithTag ("oldBackground");
