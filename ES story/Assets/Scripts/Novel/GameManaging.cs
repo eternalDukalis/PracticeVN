@@ -221,6 +221,8 @@ public class GameManaging : MonoBehaviour {
 			yield return null;
 		}
 		CanDoNext = true;
+		Destroy (DayBack);
+		Destroy (DayText);
 	}
 
 	static public bool PressForward()
