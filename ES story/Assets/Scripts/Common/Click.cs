@@ -28,6 +28,21 @@ public class Click : MonoBehaviour {
 		return false;
 	}
 
+	static public bool OnClick(GUIText target)
+	{
+		if ((Application.platform==RuntimePlatform.WindowsEditor) || (Application.platform==RuntimePlatform.WindowsPlayer))
+		{
+			if ((Input.GetKeyDown(KeyCode.Mouse0)) && (target.GetScreenRect().Contains(Input.mousePosition)))
+				return true;
+		}
+		if (Application.platform==RuntimePlatform.Android)
+		{
+			if ((Input.GetKeyDown(KeyCode.Mouse0)) && (target.GetScreenRect().Contains(Input.mousePosition)))
+				return true;
+		}
+		return false;
+	}
+
 	static public bool OnPress(GUITexture target)
 	{
 		if ((Application.platform==RuntimePlatform.WindowsEditor) || (Application.platform==RuntimePlatform.WindowsPlayer))
@@ -50,4 +65,10 @@ public class Click : MonoBehaviour {
 		return false;
 	}
 
+	static public bool MouseOver(GUIText target)
+	{
+		if (target.GetScreenRect().Contains(Input.mousePosition))
+			return true;
+		return false;
+	}
 }

@@ -6,6 +6,7 @@ public class AudioStream {
 	GameObject OldSound;
 	bool itsloop = false;
 	string spath;
+	float thevol;
 
 	static public float FadeOutSpeed = 0.01f;
 	static public GameManaging gm;
@@ -13,10 +14,11 @@ public class AudioStream {
 	{
 	}
 
-	public AudioStream(string path, bool isLooped)
+	public AudioStream(string path, bool isLooped, float volume)
 	{
 		spath = path;
 		itsloop = isLooped;
+		thevol = volume;
 	}
 
 	public void Play(string title)
@@ -33,6 +35,7 @@ public class AudioStream {
 		MainSound.audio.clip = Resources.Load<AudioClip>(spath+title);
 		MainSound.transform.position = new Vector3(0,0,-8);
 		MainSound.audio.loop = itsloop;
+		MainSound.audio.volume = thevol;
 		while (!MainSound.audio.clip.isReadyToPlay)
 		{
 			Debug.Log("lil");

@@ -15,8 +15,10 @@ public class Actor {
 	private GameObject MainSprite;
 	private GameObject EmotionSprite;
 	private bool isActive = false;
+	private int Direction = 1;
+	private IEnumerator PosCor;
+	private IEnumerator FadeCor;
 	static public GameManaging gm;
-
 	public Actor()
 	{
 		Name = "Default";
@@ -26,6 +28,8 @@ public class Actor {
 	{
 		Name = name;
 		apath = path;
+		PosCor = setSprite (Side.Center, "", Side.Center);
+		FadeCor = setSprite (Side.Center, "");
 	}
 
 	public void ChangeSprite (string title)
@@ -37,10 +41,13 @@ public class Actor {
 	public void SetSprite(Side position, string emotion)
 	{
 		if (GameManaging.PressSkip())
-			ColorChangeSpeed = FadeStep*10;
+			ColorChangeSpeed = FadeStep*3;
 		else
 			ColorChangeSpeed = FadeStep;
-		gm.StartCoroutine (setSprite (position, emotion));
+		gm.StopCoroutine (PosCor);
+		gm.StopCoroutine (FadeCor);
+		FadeCor = setSprite (position, emotion);
+		gm.StartCoroutine (FadeCor);
 	}
 	
 	public void SetSprite(Side position, string emotion, Side appearanceSide)
@@ -49,16 +56,22 @@ public class Actor {
 			MoveSpeed = SpeedStep*3;
 		else
 			MoveSpeed = SpeedStep;
-		gm.StartCoroutine (setSprite (position,emotion,appearanceSide));
+		gm.StopCoroutine (PosCor);
+		gm.StopCoroutine (FadeCor);
+		PosCor = setSprite (position, emotion, appearanceSide);
+		gm.StartCoroutine (PosCor);
 	}
 	
 	public void Delete()
 	{
 		if (GameManaging.PressSkip())
-			ColorChangeSpeed = FadeStep*10;
+			ColorChangeSpeed = FadeStep*3;
 		else
 			ColorChangeSpeed = FadeStep;
-		gm.StartCoroutine (delete ());
+		//gm.StopCoroutine (PosCor);
+		gm.StopCoroutine (FadeCor);
+		FadeCor = delete ();
+		gm.StartCoroutine (FadeCor);
 	}
 	
 	public void Delete(Side disappearanceSide)
@@ -67,9 +80,13 @@ public class Actor {
 			MoveSpeed = SpeedStep*3;
 		else
 			MoveSpeed = SpeedStep;
-		MainSprite.transform.position += new Vector3 (0, 0, -1);
+		EmotionSprite.transform.parent = null;
+		MainSprite.transform.position += new Vector3 (0, 0, -2);
 		EmotionSprite.transform.position += new Vector3 (0, 0, -1);
-		gm.StartCoroutine (delete (disappearanceSide));
+		gm.StopCoroutine (PosCor);
+		//gm.StopCoroutine (FadeCor);
+		PosCor = delete (disappearanceSide);
+		gm.StartCoroutine (PosCor);
 	}
 	
 	public void ChangePosition(Side targetPosition)
@@ -78,11 +95,15 @@ public class Actor {
 			MoveSpeed = SpeedStep*3;
 		else
 			MoveSpeed = SpeedStep;
-		gm.StartCoroutine (changePosition (targetPosition));
+		gm.StopCoroutine (PosCor);
+		//gm.StopCoroutine (FadeCor);
+		PosCor = changePosition (targetPosition);
+		gm.StartCoroutine (PosCor);
 	}
 	
 	private IEnumerator setSprite(Side position, string emotion)
 	{
+		MonoBehaviour.Destroy (EmotionSprite);
 		MonoBehaviour.Destroy (MainSprite);
 		MainSprite = new GameObject(string.Format("{0}_main",Name),typeof(GUITexture));
 		EmotionSprite = new GameObject(string.Format("{0}_emotion",Name),typeof(GUITexture));
@@ -117,6 +138,7 @@ public class Actor {
 	
 	private IEnumerator setSprite(Side position, string emotion, Side appearanceSide)
 	{
+		MonoBehaviour.Destroy (EmotionSprite);
 		MonoBehaviour.Destroy (MainSprite);
 		MainSprite = new GameObject(string.Format("{0}_main",Name),typeof(GUITexture));
 		EmotionSprite = new GameObject(string.Format("{0}_emotion",Name),typeof(GUITexture));
@@ -154,7 +176,7 @@ public class Actor {
 		EmotionSprite.transform.position += new Vector3 (0, 0.5f-(float)MainSprite.guiTexture.texture.width/2/MainSprite.guiTexture.texture.height, 0.25f);
 		MainSprite.transform.localScale = new Vector3 (Height*MainSprite.guiTexture.texture.width*Screen.height/MainSprite.guiTexture.texture.height/Screen.width, Height, 0);
 		EmotionSprite.transform.localScale = new Vector3 (1, (float)MainSprite.guiTexture.texture.width/MainSprite.guiTexture.texture.height, 0);
-		int Direction = 1;
+		Direction = 1;
 		if (finalPosition < MainSprite.transform.position.x)
 			Direction = -1;
 		while (Mathf.Abs(finalPosition-MainSprite.transform.position.x)>MoveSpeed) {
@@ -168,7 +190,7 @@ public class Actor {
 		if (isActive) {
 			while (MainSprite.guiTexture.color.a>0) {
 				MainSprite.guiTexture.color -= new Color(0,0,0,ColorChangeSpeed);
-				EmotionSprite.guiTexture.color -= new Color(0,0,0,ColorChangeSpeed);
+				EmotionSprite.guiTexture.color -= new Color(0,0,0,ColorChangeSpeed*2);
 				yield return null;
 			}
 			MonoBehaviour.Destroy (MainSprite);
@@ -192,14 +214,16 @@ public class Actor {
 				finalPosition = 1.2f;
 				break;
 			}
-			int Direction = 1;
+			Direction = 1;
 			if (finalPosition < MainSprite.transform.position.x)
 				Direction = -1;
 			while (Mathf.Abs(finalPosition-MainSprite.transform.position.x)>MoveSpeed) {
 				MainSprite.transform.position += new Vector3(Direction*MoveSpeed,0,0);
+				EmotionSprite.transform.position += new Vector3(Direction*MoveSpeed,0,0);
 				yield return null;
 			}
 			MonoBehaviour.Destroy (MainSprite);
+			MonoBehaviour.Destroy (EmotionSprite);
 			isActive = false;
 		}
 	}
@@ -219,7 +243,7 @@ public class Actor {
 			finalPosition = 0.8f;
 			break;
 		}
-		int Direction = 1;
+		Direction = 1;
 		if (finalPosition < MainSprite.transform.position.x)
 			Direction = -1;
 		while (Mathf.Abs(finalPosition-MainSprite.transform.position.x)>MoveSpeed) {

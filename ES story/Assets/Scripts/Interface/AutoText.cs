@@ -4,11 +4,11 @@ using System.Collections;
 public class AutoText : MonoBehaviour {
 
 	private Color standartColor;
+	public Color OnMouse;
 	private GameObject myCircle;
 	// Use this for initialization
 	void Start () {
-		standartColor = this.guiText.color;
-		this.guiText.color = standartColor - new Color(0,0,0,standartColor.a*0.75f);
+		standartColor = this.guiTexture.color;
 		myCircle = GameObject.FindGameObjectWithTag("AutoCircle");
 	}
 	
@@ -19,9 +19,14 @@ public class AutoText : MonoBehaviour {
 
 	void OnGUI()
 	{
-		if (Click.MouseOver(myCircle.guiTexture))
-			this.guiText.color = standartColor;
-		else
-			this.guiText.color = standartColor - new Color(0,0,0,standartColor.a*0.75f);
+		if ((Application.platform == RuntimePlatform.WindowsEditor) || (Application.platform == RuntimePlatform.WindowsPlayer))
+			if (Click.MouseOver (myCircle.guiTexture)) 
+			{
+				this.guiTexture.color = OnMouse;
+			} 
+			else 
+			{
+				this.guiTexture.color = standartColor;
+			}
 	}
 }

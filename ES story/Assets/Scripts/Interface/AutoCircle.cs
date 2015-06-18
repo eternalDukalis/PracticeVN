@@ -4,6 +4,7 @@ using System.Collections;
 public class AutoCircle : MonoBehaviour {
 
 	private Color standartColor;
+	public Color OnMouse;
 	// Use this for initialization
 	void Start () {
 		standartColor = this.guiTexture.color;
@@ -19,10 +20,17 @@ public class AutoCircle : MonoBehaviour {
 	{
 		if (GameManaging.AutoMode)
 		{
-			if (Click.MouseOver(this.guiTexture))
-				this.guiTexture.color = standartColor;
+			if ((Application.platform == RuntimePlatform.WindowsEditor) || (Application.platform == RuntimePlatform.WindowsPlayer))
+			{
+				if (Click.MouseOver(this.guiTexture))
+					this.guiTexture.color = OnMouse;
+				else
+					this.guiTexture.color = standartColor;
+			}
 			else
-				this.guiTexture.color = standartColor - new Color(0,0,0,standartColor.a*0.75f);
+			{
+				this.guiTexture.color = standartColor;
+			}
 		}
 		else
 			this.guiTexture.color = new Color(0,0,0,0);

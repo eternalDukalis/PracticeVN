@@ -7,7 +7,6 @@ public class GameManaging : MonoBehaviour {
 	static public string Author = "";
 	static public Texture Background;
 	static public bool CanDoNext = true;
-	static public int GlobalTextInterval = 3;
 	static GameObject thebackground;
 	static GameObject oldBackground;
 	static public bool BackMode = false;
@@ -20,12 +19,12 @@ public class GameManaging : MonoBehaviour {
 	static Color StandartColor;
 	static public float SkipInterval = 1;
 	static public bool AutoMode = false;
-	static public float AutoSpeed = 0.03f;
-	static public float AutoInterval = 1;
 	static public GameObject AutoButton;
 	static private string BackgroundPath = "Graphics/Backgrounds/";
 	static public float FadeSpeed = 0.035f;
 	static public bool BloodMode = false;
+	static string targetText;
+	public Color OnMouse;
 	void Start () {
 		thebackground = GameObject.FindGameObjectWithTag ("Background");
 		oldBackground = GameObject.FindGameObjectWithTag ("oldBackground");
@@ -44,6 +43,7 @@ public class GameManaging : MonoBehaviour {
 	void Update () {
 		if ((PressLeft()) && (!BackMode))
 		{
+			targetText = "";
 			BackMode = true;
 			currentBack = 0;
 			originalString = Text;
@@ -102,16 +102,17 @@ public class GameManaging : MonoBehaviour {
 		CanDoNext = false;
 		Text = "";
 		Author = "";
-		while (Text.Length<s.Length) {
+		targetText = s;
+		while (Text.Length<targetText.Length) {
 			TextInterval++;
-			if (TextInterval>=GlobalTextInterval)
+			if (TextInterval>=Settings.TextSpeed)
 			{
-				Text += s[Text.Length];
+				Text += targetText[Text.Length];
 				TextInterval = 0;
 			}
 			if (((PressForward()) || (PressSkip())) && (Text.Length>1))
 			{
-				Text = s;
+				Text = targetText;
 				break;
 			}
 			yield return null;
@@ -124,7 +125,7 @@ public class GameManaging : MonoBehaviour {
 			}
 		}
 		else
-			yield return new WaitForSeconds(AutoInterval + Text.Length*AutoSpeed);
+			yield return new WaitForSeconds(Settings.AutoTime + Text.Length*Settings.AutoMultiplier);
 		CanDoNext = true;
 	}
 	
@@ -134,16 +135,17 @@ public class GameManaging : MonoBehaviour {
 		CanDoNext = false;
 		Text = "";
 		Author = a;
-		while (Text.Length<s.Length) {
+		targetText = s;
+		while (Text.Length<targetText.Length) {
 			TextInterval++;
-			if (TextInterval>=GlobalTextInterval)
+			if (TextInterval>=Settings.TextSpeed)
 			{
-				Text += s[Text.Length];
+				Text += targetText[Text.Length];
 				TextInterval = 0;
 			}
 			if (((PressForward()) || (PressSkip())) && (Text.Length>1))
 			{
-				Text = s;
+				Text = targetText;
 				break;
 			}
 			yield return null;
@@ -156,7 +158,7 @@ public class GameManaging : MonoBehaviour {
 			}
 		}
 		else
-			yield return new WaitForSeconds(AutoInterval + Text.Length*AutoSpeed);
+			yield return new WaitForSeconds(Settings.AutoTime + Text.Length*Settings.AutoMultiplier);
 		CanDoNext = true;
 	}
 
@@ -178,6 +180,12 @@ public class GameManaging : MonoBehaviour {
 		CanDoNext = true;
 	}
 
+	static public void DefaultBackground(string path)
+	{
+		Background = Resources.Load<Texture>(BackgroundPath + path);
+		oldBackground.guiTexture.color = new Color (0, 0, 0, 0);
+	}
+
 	static public IEnumerator ShowDay(string whattoshow, string initialBackground)
 	{
 		float TimeToShow = 3;
@@ -196,6 +204,7 @@ public class GameManaging : MonoBehaviour {
 			yield return null;
 		}
 		GameObject DayText = new GameObject ("daytext", typeof(GUIText));
+		DayText.guiText.font = Resources.Load<Font>("Fonts/RODCHENKOC");
 		DayText.guiText.color = new Color (1, 1, 1, 0);
 		DayText.transform.position = new Vector3 (0.5f, 0.5f, 16);
 		DayText.guiText.alignment = TextAlignment.Center;
@@ -225,6 +234,28 @@ public class GameManaging : MonoBehaviour {
 		Destroy (DayText);
 	}
 
+	static public IEnumerator Flashing()
+	{
+		float FlashSpeed = 0.01f;
+		if (PressSkip ())
+			FlashSpeed = 0.05f;
+		CanDoNext = false;
+		oldBackground.guiTexture.color = new Color (0, 0, 0, 0);
+		while (oldBackground.guiTexture.color.a<0.5f) 
+		{
+			oldBackground.guiTexture.color += new Color(0,0,0,FlashSpeed);
+			yield return null;
+		}
+		oldBackground.guiTexture.color = new Color (0, 0, 0, 0.5f);
+		yield return null;
+		while (oldBackground.guiTexture.color.a > 0) 
+		{
+			oldBackground.guiTexture.color -= new Color(0,0,0,FlashSpeed);
+			yield return null;
+		}
+		CanDoNext = true;
+	}
+
 	static public bool PressForward()
 	{
 		if ((Input.GetKeyDown (KeyCode.Space)) || (Input.GetKeyDown(KeyCode.Return)) || ((PressRight()) && (!BackMode)))
@@ -234,14 +265,14 @@ public class GameManaging : MonoBehaviour {
 
 	static public bool PressLeft()
 	{
-		if ((Input.GetKeyDown(KeyCode.LeftArrow)) || (Click.OnClick(LeftArrow.guiTexture)))
+		if ((Input.GetKeyDown(KeyCode.LeftArrow)) || (Click.OnClick(LeftArrow.guiTexture)) || (Input.GetAxis("Mouse ScrollWheel")>0))
 		    return true;
 		return false;
 	}
 
 	static public bool PressRight()
 	{
-		if ((Input.GetKeyDown(KeyCode.RightArrow)) || (Click.OnClick(RightArrow.guiTexture)))
+		if ((Input.GetKeyDown(KeyCode.RightArrow)) || (Click.OnClick(RightArrow.guiTexture)) || (Input.GetAxis("Mouse ScrollWheel")<0))
 			return true;
 		return false;
 	}
@@ -262,11 +293,11 @@ public class GameManaging : MonoBehaviour {
 		return false;
 	}
 
-	static private void DependOnMouse(GameObject target)
+	private void DependOnMouse(GameObject target)
 	{
 		if (Click.MouseOver(target.guiTexture))
-			target.guiTexture.color = StandartColor;
+			target.guiTexture.color = OnMouse;
 		else
-			target.guiTexture.color = StandartColor - new Color(0,0,0,StandartColor.a*0.75f);
+			target.guiTexture.color = StandartColor;
 	}
 }
