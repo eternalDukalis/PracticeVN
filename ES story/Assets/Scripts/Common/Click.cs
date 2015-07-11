@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Click : MonoBehaviour {
 
+	static int ClicksOnObjects = 0;
 	// Use this for initialization
 	void Start () {
 	
@@ -18,13 +19,20 @@ public class Click : MonoBehaviour {
 		if ((Application.platform==RuntimePlatform.WindowsEditor) || (Application.platform==RuntimePlatform.WindowsPlayer))
 		{
 			if ((Input.GetKeyDown(KeyCode.Mouse0)) && (target.GetScreenRect().Contains(Input.mousePosition)))
+			{
+				ClicksOnObjects++;
 				return true;
+			}
 		}
-		if (Application.platform==RuntimePlatform.Android)
+		if ((Application.platform==RuntimePlatform.Android) || (Application.platform==RuntimePlatform.IPhonePlayer))
 		{
 			if ((Input.GetKeyDown(KeyCode.Mouse0)) && (target.GetScreenRect().Contains(Input.mousePosition)))
+			{
+				ClicksOnObjects++;
 				return true;
+			}
 		}
+		//Debug.Log (ClicksOnObjects);
 		return false;
 	}
 
@@ -33,12 +41,18 @@ public class Click : MonoBehaviour {
 		if ((Application.platform==RuntimePlatform.WindowsEditor) || (Application.platform==RuntimePlatform.WindowsPlayer))
 		{
 			if ((Input.GetKeyDown(KeyCode.Mouse0)) && (target.GetScreenRect().Contains(Input.mousePosition)))
+			{
+				ClicksOnObjects++;
 				return true;
+			}
 		}
-		if (Application.platform==RuntimePlatform.Android)
+		if ((Application.platform==RuntimePlatform.Android) || (Application.platform==RuntimePlatform.IPhonePlayer))
 		{
 			if ((Input.GetKeyDown(KeyCode.Mouse0)) && (target.GetScreenRect().Contains(Input.mousePosition)))
+			{
+				ClicksOnObjects++;
 				return true;
+			}
 		}
 		return false;
 	}
@@ -48,12 +62,18 @@ public class Click : MonoBehaviour {
 		if ((Application.platform==RuntimePlatform.WindowsEditor) || (Application.platform==RuntimePlatform.WindowsPlayer))
 		{
 			if ((Input.GetKey(KeyCode.Mouse0)) && (target.GetScreenRect().Contains(Input.mousePosition)))
+			{
+				ClicksOnObjects++;
 				return true;
+			}
 		}
-		if (Application.platform==RuntimePlatform.Android)
+		if ((Application.platform==RuntimePlatform.Android) || (Application.platform==RuntimePlatform.IPhonePlayer))
 		{
 			if ((Input.GetKey(KeyCode.Mouse0)) && (target.GetScreenRect().Contains(Input.mousePosition)))
+			{
+				ClicksOnObjects++;
 				return true;
+			}
 		}
 		return false;
 	}
@@ -69,6 +89,17 @@ public class Click : MonoBehaviour {
 	{
 		if (target.GetScreenRect().Contains(Input.mousePosition))
 			return true;
+		return false;
+	}
+
+	static public bool RandomClick()
+	{
+		if (Input.GetKeyDown(KeyCode.Mouse0))
+		{
+			if (ClicksOnObjects==0)
+				return true;
+		}
+		ClicksOnObjects = 0;
 		return false;
 	}
 }

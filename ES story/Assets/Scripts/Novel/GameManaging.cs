@@ -258,7 +258,7 @@ public class GameManaging : MonoBehaviour {
 
 	static public bool PressForward()
 	{
-		if ((Input.GetKeyDown (KeyCode.Space)) || (Input.GetKeyDown(KeyCode.Return)) || ((PressRight()) && (!BackMode)))
+		if ((Input.GetKeyDown (KeyCode.Space)) || (Input.GetKeyDown(KeyCode.Return)) || (Click.RandomClick()) || ((PressRight()) && (!BackMode)))
 			return true;
 		return false;
 	}
