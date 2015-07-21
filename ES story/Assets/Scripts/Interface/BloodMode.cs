@@ -4,6 +4,7 @@ using System.Collections;
 public class BloodMode : MonoBehaviour {
 
 	Color StandartColor;
+	Color CurrentColor;
 	// Use this for initialization
 	void Start () {
 		StandartColor = this.guiTexture.color;
@@ -12,14 +13,11 @@ public class BloodMode : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
-	}
-
-	void OnGUI()
-	{
 		if (GameManaging.BloodMode)
-			this.guiTexture.color = StandartColor;
+			CurrentColor = StandartColor;
 		else
-			this.guiTexture.color = new Color(0,0,0,0);
+			CurrentColor = new Color(0,0,0,0);
+		if (this.guiTexture.color != CurrentColor)
+			this.guiTexture.color = CurrentColor;
 	}
 }

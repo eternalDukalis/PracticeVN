@@ -5,6 +5,7 @@ public class ExitButton : MonoBehaviour {
 
 	public Color MouseOn;
 	Color standartColor;
+	Color CurrentColor;
 	// Use this for initialization
 	void Start () {
 		standartColor = this.guiTexture.color;
@@ -14,14 +15,14 @@ public class ExitButton : MonoBehaviour {
 	void Update () {
 		if ((Click.OnClick(this.guiTexture)) || (Input.GetKeyDown(KeyCode.Escape)))
 			ExitBoard.isOnScreen = !ExitBoard.isOnScreen;
-	}
-
-	void OnGUI()
-	{
-		if ((Application.platform == RuntimePlatform.WindowsEditor) || (Application.platform == RuntimePlatform.WindowsPlayer))
+		if (PlayingPlatform.isPC())
+		{
 			if (Click.MouseOver(this.guiTexture))
-				this.guiTexture.color = MouseOn;
+				CurrentColor = MouseOn;
 			else
-				this.guiTexture.color = standartColor;
+				CurrentColor = standartColor;
+			if (CurrentColor!=this.guiTexture.color)
+				this.guiTexture.color = CurrentColor;
+		}
 	}
 }

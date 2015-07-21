@@ -6,6 +6,7 @@ public class AutoText : MonoBehaviour {
 	private Color standartColor;
 	public Color OnMouse;
 	private GameObject myCircle;
+	Color CurrentColor;
 	// Use this for initialization
 	void Start () {
 		standartColor = this.guiTexture.color;
@@ -14,19 +15,18 @@ public class AutoText : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
-	}
-
-	void OnGUI()
-	{
-		if ((Application.platform == RuntimePlatform.WindowsEditor) || (Application.platform == RuntimePlatform.WindowsPlayer))
+		if (PlayingPlatform.isPC())
+		{
 			if (Click.MouseOver (myCircle.guiTexture)) 
 			{
-				this.guiTexture.color = OnMouse;
+				CurrentColor = OnMouse;
 			} 
 			else 
 			{
-				this.guiTexture.color = standartColor;
+				CurrentColor = standartColor;
 			}
+		}
+		if (this.guiTexture.color!=CurrentColor)
+			this.guiTexture.color = CurrentColor;
 	}
 }

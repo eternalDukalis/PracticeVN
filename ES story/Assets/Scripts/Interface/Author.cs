@@ -14,6 +14,7 @@ public class Author : MonoBehaviour {
 	public Color UlianaColor;
 	public Color SemyonColor;
 	public Color SanyokColor;
+	Color CurrentColor;
 	// Use this for initialization
 	void Start () {
 	
@@ -21,50 +22,48 @@ public class Author : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
-	}
-
-	void OnGUI()
-	{
-		this.guiText.text = GameManaging.Author;
+		if (this.guiText.text!=GameManaging.Author)
+			this.guiText.text = GameManaging.Author;
 		switch (GameManaging.Author) 
 		{
 		case "Алиса":
-			this.guiText.color = AliceColor;
+			CurrentColor = AliceColor;
 			break;
 		case "Электроник":
-			this.guiText.color = ElectronicColor;
+			CurrentColor = ElectronicColor;
 			break;
 		case "Мику":
-			this.guiText.color = MikuColor;
+			CurrentColor = MikuColor;
 			break;
 		case "Ольга Дмитриевна":
-			this.guiText.color = OlgaColor;
+			CurrentColor = OlgaColor;
 			break;
 		case "Женя":
-			this.guiText.color = ZhenyaColor;
+			CurrentColor = ZhenyaColor;
 			break;
 		case "Шурик":
-			this.guiText.color = ShurikColor;
+			CurrentColor = ShurikColor;
 			break;
 		case "Славя":
-			this.guiText.color = SlavyaColor;
+			CurrentColor = SlavyaColor;
 			break;
 		case "Лена":
-			this.guiText.color = HelenColor;
+			CurrentColor = HelenColor;
 			break;
 		case "Ульяна":
-			this.guiText.color = UlianaColor;
+			CurrentColor = UlianaColor;
 			break;
 		case "Семён":
-			this.guiText.color = SemyonColor;
+			CurrentColor = SemyonColor;
 			break;
 		case "Санёк":
-			this.guiText.color = SanyokColor;
+			CurrentColor = SanyokColor;
 			break;
 		default:
-			this.guiText.color = new Color(1,1,1,1);
+			CurrentColor = new Color(1,1,1,1);
 			break;
 		}
+		if (this.guiText.color!=CurrentColor)
+			this.guiText.color = CurrentColor;
 	}
 }

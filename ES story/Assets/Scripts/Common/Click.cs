@@ -16,7 +16,7 @@ public class Click : MonoBehaviour {
 
 	static public bool OnClick(GUITexture target)
 	{
-		if ((Application.platform==RuntimePlatform.WindowsEditor) || (Application.platform==RuntimePlatform.WindowsPlayer))
+		if (PlayingPlatform.isPC())
 		{
 			if ((Input.GetKeyDown(KeyCode.Mouse0)) && (target.GetScreenRect().Contains(Input.mousePosition)))
 			{
@@ -24,7 +24,7 @@ public class Click : MonoBehaviour {
 				return true;
 			}
 		}
-		if ((Application.platform==RuntimePlatform.Android) || (Application.platform==RuntimePlatform.IPhonePlayer))
+		if (PlayingPlatform.isMobile())
 		{
 			if ((Input.GetKeyDown(KeyCode.Mouse0)) && (target.GetScreenRect().Contains(Input.mousePosition)))
 			{
@@ -38,7 +38,7 @@ public class Click : MonoBehaviour {
 
 	static public bool OnClick(GUIText target)
 	{
-		if ((Application.platform==RuntimePlatform.WindowsEditor) || (Application.platform==RuntimePlatform.WindowsPlayer))
+		if (PlayingPlatform.isPC())
 		{
 			if ((Input.GetKeyDown(KeyCode.Mouse0)) && (target.GetScreenRect().Contains(Input.mousePosition)))
 			{
@@ -46,7 +46,7 @@ public class Click : MonoBehaviour {
 				return true;
 			}
 		}
-		if ((Application.platform==RuntimePlatform.Android) || (Application.platform==RuntimePlatform.IPhonePlayer))
+		if (PlayingPlatform.isMobile())
 		{
 			if ((Input.GetKeyDown(KeyCode.Mouse0)) && (target.GetScreenRect().Contains(Input.mousePosition)))
 			{
@@ -59,7 +59,7 @@ public class Click : MonoBehaviour {
 
 	static public bool OnPress(GUITexture target)
 	{
-		if ((Application.platform==RuntimePlatform.WindowsEditor) || (Application.platform==RuntimePlatform.WindowsPlayer))
+		if (PlayingPlatform.isPC())
 		{
 			if ((Input.GetKey(KeyCode.Mouse0)) && (target.GetScreenRect().Contains(Input.mousePosition)))
 			{
@@ -67,7 +67,7 @@ public class Click : MonoBehaviour {
 				return true;
 			}
 		}
-		if ((Application.platform==RuntimePlatform.Android) || (Application.platform==RuntimePlatform.IPhonePlayer))
+		if (PlayingPlatform.isMobile())
 		{
 			if ((Input.GetKey(KeyCode.Mouse0)) && (target.GetScreenRect().Contains(Input.mousePosition)))
 			{
