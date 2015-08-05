@@ -24,6 +24,9 @@ public class GameManaging : MonoBehaviour {
 	static public float FadeSpeed = 0.035f;
 	static public bool BloodMode = false;
 	static string targetText;
+	static public GameObject TextForm;
+	static GameManaging gm;
+	static GameObject skp;
 	static string titresText = "Спасибо за прочтение! \n " +
 		"История полностью вымышлена,\n" +
 		"все совпадения с реальностью случайны.\n" +
@@ -59,7 +62,17 @@ public class GameManaging : MonoBehaviour {
 		"(Silent Owl cover)\n" +
 		"\n" +
 		"МУЗЫКА ИЗ ФИНАЛЬНЫХ ТИТРОВ\n" +
-		"For The Stars - Road From Nowhere\n";
+		"For The Stars - Road From Nowhere\n" +
+		"\n" +
+		"ТЕСТИРОВАНИЕ\n" +
+		"god is my lover\n" +
+		"rafffkaaa\n" +
+		"\n" +
+		"ДВИЖОК\n" +
+		"Unity3D\n" +
+		"\n" +
+		"ГРУППА ВК\n" +
+		"vk.com/dukalisgames\n";
 	public Color OnMouse;
 	void Start () {
 		thebackground = GameObject.FindGameObjectWithTag ("Background");
@@ -71,8 +84,12 @@ public class GameManaging : MonoBehaviour {
 		//Background = thebackground.guiTexture.texture;
 		Actor.gm = this;
 		AudioStream.gm = this;
+		gm = this;
 		stText = new StackText ();
-		StandartColor = LeftArrow.guiTexture.color;
+		StandartColor = LeftArrow.GetComponent<GUITexture>().color;
+		TextForm = GameObject.FindGameObjectWithTag ("TextForm");
+		skp = GameObject.FindGameObjectWithTag ("SkipTitres");
+		skp.SetActive (false);
 	}
 	
 	// Update is called once per frame
@@ -125,9 +142,10 @@ public class GameManaging : MonoBehaviour {
 	{
 		int TextInterval = 0;
 		CanDoNext = false;
-		Text = "";
+		Text = "     ";
+		int StartTextLength = Text.Length;
 		Author = "";
-		targetText = s;
+		targetText = Text + s;
 		while (Text.Length<targetText.Length) {
 			TextInterval++;
 			if (TextInterval>=Settings.TextSpeed)
@@ -135,7 +153,7 @@ public class GameManaging : MonoBehaviour {
 				Text += targetText[Text.Length];
 				TextInterval = 0;
 			}
-			if (((PressForward()) || (PressSkip())) && (Text.Length>1))
+			if (((PressForward()) || (PressSkip())) && (Text.Length>StartTextLength + 1))
 			{
 				Text = targetText;
 				break;
@@ -150,7 +168,8 @@ public class GameManaging : MonoBehaviour {
 			}
 		}
 		else
-			yield return new WaitForSeconds(Settings.AutoTime + Text.Length*Settings.AutoMultiplier);
+			//yield return new WaitForSeconds(Settings.AutoTime + Text.Length*Settings.AutoMultiplier);
+			yield return gm.StartCoroutine(WaitAuto(Text.Length));
 		CanDoNext = true;
 	}
 	
@@ -158,9 +177,10 @@ public class GameManaging : MonoBehaviour {
 	{
 		int TextInterval = 0;
 		CanDoNext = false;
-		Text = "";
+		Text = "     ";
+		int StartTextLength = Text.Length;
 		Author = a;
-		targetText = s;
+		targetText = Text + s;
 		while (Text.Length<targetText.Length) {
 			TextInterval++;
 			if (TextInterval>=Settings.TextSpeed)
@@ -168,7 +188,7 @@ public class GameManaging : MonoBehaviour {
 				Text += targetText[Text.Length];
 				TextInterval = 0;
 			}
-			if (((PressForward()) || (PressSkip())) && (Text.Length>1))
+			if (((PressForward()) || (PressSkip())) && (Text.Length>StartTextLength + 1))
 			{
 				Text = targetText;
 				break;
@@ -183,7 +203,8 @@ public class GameManaging : MonoBehaviour {
 			}
 		}
 		else
-			yield return new WaitForSeconds(Settings.AutoTime + Text.Length*Settings.AutoMultiplier);
+			//yield return new WaitForSeconds(Settings.AutoTime + Text.Length*Settings.AutoMultiplier);
+			yield return gm.StartCoroutine(WaitAuto(Text.Length));
 		CanDoNext = true;
 	}
 
@@ -191,15 +212,15 @@ public class GameManaging : MonoBehaviour {
 	{
 
 		CanDoNext = false;
-		oldBackground.guiTexture.color = thebackground.guiTexture.color;
-		oldBackground.guiTexture.texture = thebackground.guiTexture.texture;
-		thebackground.guiTexture.texture = Resources.Load<Texture>(BackgroundPath + path);
-		while (oldBackground.guiTexture.color.a>=0) {
-			if (((PressForward()) || (PressSkip())) && (oldBackground.guiTexture.color.a<0.5f) && (!BackMode))
+		oldBackground.GetComponent<GUITexture>().color = thebackground.GetComponent<GUITexture>().color;
+		oldBackground.GetComponent<GUITexture>().texture = thebackground.GetComponent<GUITexture>().texture;
+		thebackground.GetComponent<GUITexture>().texture = Resources.Load<Texture>(BackgroundPath + path);
+		while (oldBackground.GetComponent<GUITexture>().color.a>=0) {
+			if (((PressForward()) || (PressSkip())) && (oldBackground.GetComponent<GUITexture>().color.a<0.5f) && (!BackMode))
 			{
-				oldBackground.guiTexture.color = new Color(0,0,0,0);
+				oldBackground.GetComponent<GUITexture>().color = new Color(0,0,0,0);
 			}
-			oldBackground.guiTexture.color -= new Color(0,0,0,0.01f);
+			oldBackground.GetComponent<GUITexture>().color -= new Color(0,0,0,0.01f);
 			yield return null;
 		}
 		CanDoNext = true;
@@ -207,15 +228,16 @@ public class GameManaging : MonoBehaviour {
 
 	static public void DefaultBackground(string path)
 	{
-		thebackground.guiTexture.texture = Resources.Load<Texture>(BackgroundPath + path);
-		oldBackground.guiTexture.color = new Color (0, 0, 0, 0);
+		thebackground.GetComponent<GUITexture>().texture = Resources.Load<Texture>(BackgroundPath + path);
+		oldBackground.GetComponent<GUITexture>().color = new Color (0, 0, 0, 0);
 	}
 
 	static public IEnumerator Titres(string initialBackground)
 	{
+		bool SkipThis = false;
 		AudioStream Music = new AudioStream ("Sounds/Music/", false, Settings.MusicOn.GetHashCode ());
 		Music.Play ("Road From Nowhere");
-		float TextMoveSpeed = 0.001f;
+		float TextMoveSpeed = 0.00085f;
 		float TimeToShow = 3;
 		float fontSizeMulitplier = 0.15f;
 		GameObject obj = GameObject.FindGameObjectWithTag("Titres");
@@ -223,51 +245,73 @@ public class GameManaging : MonoBehaviour {
 		Text = "";
 		Author = "";
 		GameObject TitBack = new GameObject ("titback", typeof(GUITexture));
-		TitBack.guiTexture.texture = Resources.Load<Texture>(BackgroundPath + initialBackground);
+		TitBack.GetComponent<GUITexture>().texture = Resources.Load<Texture>(BackgroundPath + initialBackground);
 		TitBack.transform.position = new Vector3 (0.5f, 0.5f, 14);
 		TitBack.transform.localScale = new Vector3 (1, 1, 0);
-		TitBack.guiTexture.color = new Color (0, 0, 0, 0);
-		while (TitBack.guiTexture.color.a<1)
+		TitBack.GetComponent<GUITexture>().color = new Color (0, 0, 0, 0);
+		while (TitBack.GetComponent<GUITexture>().color.a<1)
 		{
-			TitBack.guiTexture.color += new Color(0,0,0,FadeSpeed);
+			TitBack.GetComponent<GUITexture>().color += new Color(0,0,0,FadeSpeed);
 			yield return null;
 		}
-		obj.guiText.text = titresText;
-		thebackground.guiTexture.texture = Resources.Load<Texture>(BackgroundPath + initialBackground);
-		while (obj.guiText.GetScreenRect().min.y<Screen.height)
+		skp.SetActive (true);
+		obj.GetComponent<GUIText>().text = titresText;
+		thebackground.GetComponent<GUITexture>().texture = Resources.Load<Texture>(BackgroundPath + initialBackground);
+		while (obj.GetComponent<GUIText>().GetScreenRect().min.y<Screen.height)
 		{
 			obj.transform.position += new Vector3(0, TextMoveSpeed, 0);
+			if (Click.OnClick(skp.GetComponent<GUITexture>()))
+			{
+				SkipThis = true;
+				break;
+			}
 			yield return null;
 		}
-		GameObject DayText = new GameObject ("daytext", typeof(GUIText));
-		DayText.guiText.font = Resources.Load<Font>("Fonts/RODCHENKOC");
-		DayText.guiText.color = new Color (1, 1, 1, 0);
-		DayText.transform.position = new Vector3 (0.5f, 0.5f, 16);
-		DayText.guiText.alignment = TextAlignment.Center;
-		DayText.guiText.anchor = TextAnchor.MiddleCenter;
-		DayText.guiText.fontStyle = FontStyle.Bold;
-		DayText.guiText.fontSize = (int)(Screen.height * fontSizeMulitplier);
-		DayText.guiText.text = "К О Н Е Ц";
-		while (DayText.guiText.color.a<1)
+		if (SkipThis)
+			Music.Stop();
+		while ((SkipThis) && (obj.GetComponent<GUIText>().color.a>0))
 		{
-			DayText.guiText.color += new Color(0,0,0,FadeSpeed);
+			obj.GetComponent<GUIText>().color -= new Color(0,0,0,FadeSpeed);
 			yield return null;
 		}
-		yield return new WaitForSeconds(TimeToShow);
-		Music.Stop ();
-		while (DayText.guiText.color.a>0)
+		while ((SkipThis) && (TitBack.GetComponent<GUITexture>().color.a>0))
 		{
-			DayText.guiText.color -= new Color(0,0,0,FadeSpeed);
+			TitBack.GetComponent<GUITexture>().color -= new Color(0,0,0,FadeSpeed);
 			yield return null;
 		}
-		while (TitBack.guiTexture.color.a>0)
+		skp.SetActive (false);
+		if (!SkipThis)
 		{
-			TitBack.guiTexture.color -= new Color(0,0,0,FadeSpeed);
-			yield return null;
+			GameObject DayText = new GameObject ("daytext", typeof(GUIText));
+			DayText.GetComponent<GUIText>().font = Resources.Load<Font>("Fonts/RODCHENKOC");
+			DayText.GetComponent<GUIText>().color = new Color (1, 1, 1, 0);
+			DayText.transform.position = new Vector3 (0.5f, 0.5f, 16);
+			DayText.GetComponent<GUIText>().alignment = TextAlignment.Center;
+			DayText.GetComponent<GUIText>().anchor = TextAnchor.MiddleCenter;
+			DayText.GetComponent<GUIText>().fontStyle = FontStyle.Bold;
+			DayText.GetComponent<GUIText>().fontSize = (int)(Screen.height * fontSizeMulitplier);
+			DayText.GetComponent<GUIText>().text = "К О Н Е Ц";
+			while (DayText.GetComponent<GUIText>().color.a<1)
+			{
+				DayText.GetComponent<GUIText>().color += new Color(0,0,0,FadeSpeed);
+				yield return null;
+			}
+			yield return new WaitForSeconds(TimeToShow);
+			Music.Stop ();
+			while (DayText.GetComponent<GUIText>().color.a>0)
+			{
+				DayText.GetComponent<GUIText>().color -= new Color(0,0,0,FadeSpeed);
+				yield return null;
+			}
+			while (TitBack.GetComponent<GUITexture>().color.a>0)
+			{
+				TitBack.GetComponent<GUITexture>().color -= new Color(0,0,0,FadeSpeed);
+				yield return null;
+			}
+			Destroy (DayText);
 		}
 		CanDoNext = true;
 		Destroy (TitBack);
-		Destroy (DayText);
 	}
 
 	static public IEnumerator ShowDay(string whattoshow, string initialBackground)
@@ -278,39 +322,39 @@ public class GameManaging : MonoBehaviour {
 		Text = "";
 		Author = "";
 		GameObject DayBack = new GameObject("dayback",typeof(GUITexture));
-		DayBack.guiTexture.texture = Resources.Load<Texture>(BackgroundPath + initialBackground);
+		DayBack.GetComponent<GUITexture>().texture = Resources.Load<Texture>(BackgroundPath + initialBackground);
 		DayBack.transform.position = new Vector3 (0.5f, 0.5f, 15);
 		DayBack.transform.localScale = new Vector3 (1, 1, 0);
-		DayBack.guiTexture.color = new Color (0, 0, 0, 0);
-		while (DayBack.guiTexture.color.a<1)
+		DayBack.GetComponent<GUITexture>().color = new Color (0, 0, 0, 0);
+		while (DayBack.GetComponent<GUITexture>().color.a<1)
 		{
-			DayBack.guiTexture.color += new Color(0,0,0,FadeSpeed);
+			DayBack.GetComponent<GUITexture>().color += new Color(0,0,0,FadeSpeed);
 			yield return null;
 		}
 		GameObject DayText = new GameObject ("daytext", typeof(GUIText));
-		DayText.guiText.font = Resources.Load<Font>("Fonts/RODCHENKOC");
-		DayText.guiText.color = new Color (1, 1, 1, 0);
+		DayText.GetComponent<GUIText>().font = Resources.Load<Font>("Fonts/RODCHENKOC");
+		DayText.GetComponent<GUIText>().color = new Color (1, 1, 1, 0);
 		DayText.transform.position = new Vector3 (0.5f, 0.5f, 16);
-		DayText.guiText.alignment = TextAlignment.Center;
-		DayText.guiText.anchor = TextAnchor.MiddleCenter;
-		DayText.guiText.fontStyle = FontStyle.Bold;
-		DayText.guiText.fontSize = (int)(Screen.height * fontSizeMulitplier);
-		DayText.guiText.text = whattoshow;
-		while (DayText.guiText.color.a<1)
+		DayText.GetComponent<GUIText>().alignment = TextAlignment.Center;
+		DayText.GetComponent<GUIText>().anchor = TextAnchor.MiddleCenter;
+		DayText.GetComponent<GUIText>().fontStyle = FontStyle.Bold;
+		DayText.GetComponent<GUIText>().fontSize = (int)(Screen.height * fontSizeMulitplier);
+		DayText.GetComponent<GUIText>().text = whattoshow;
+		while (DayText.GetComponent<GUIText>().color.a<1)
 		{
-			DayText.guiText.color += new Color(0,0,0,FadeSpeed);
+			DayText.GetComponent<GUIText>().color += new Color(0,0,0,FadeSpeed);
 			yield return null;
 		}
-		thebackground.guiTexture.texture = Resources.Load<Texture>(BackgroundPath + initialBackground);
+		thebackground.GetComponent<GUITexture>().texture = Resources.Load<Texture>(BackgroundPath + initialBackground);
 		yield return new WaitForSeconds(TimeToShow);
-		while (DayText.guiText.color.a>0)
+		while (DayText.GetComponent<GUIText>().color.a>0)
 		{
-			DayText.guiText.color -= new Color(0,0,0,FadeSpeed);
+			DayText.GetComponent<GUIText>().color -= new Color(0,0,0,FadeSpeed);
 			yield return null;
 		}
-		while (DayBack.guiTexture.color.a>0)
+		while (DayBack.GetComponent<GUITexture>().color.a>0)
 		{
-			DayBack.guiTexture.color -= new Color(0,0,0,FadeSpeed);
+			DayBack.GetComponent<GUITexture>().color -= new Color(0,0,0,FadeSpeed);
 			yield return null;
 		}
 		CanDoNext = true;
@@ -324,17 +368,17 @@ public class GameManaging : MonoBehaviour {
 		if (PressSkip ())
 			FlashSpeed = 0.05f;
 		CanDoNext = false;
-		oldBackground.guiTexture.color = new Color (0, 0, 0, 0);
-		while (oldBackground.guiTexture.color.a<0.5f) 
+		oldBackground.GetComponent<GUITexture>().color = new Color (0, 0, 0, 0);
+		while (oldBackground.GetComponent<GUITexture>().color.a<0.5f) 
 		{
-			oldBackground.guiTexture.color += new Color(0,0,0,FlashSpeed);
+			oldBackground.GetComponent<GUITexture>().color += new Color(0,0,0,FlashSpeed);
 			yield return null;
 		}
-		oldBackground.guiTexture.color = new Color (0, 0, 0, 0.5f);
+		oldBackground.GetComponent<GUITexture>().color = new Color (0, 0, 0, 0.5f);
 		yield return null;
-		while (oldBackground.guiTexture.color.a > 0) 
+		while (oldBackground.GetComponent<GUITexture>().color.a > 0) 
 		{
-			oldBackground.guiTexture.color -= new Color(0,0,0,FlashSpeed);
+			oldBackground.GetComponent<GUITexture>().color -= new Color(0,0,0,FlashSpeed);
 			yield return null;
 		}
 		CanDoNext = true;
@@ -346,18 +390,18 @@ public class GameManaging : MonoBehaviour {
 		if (PressSkip ())
 			FlashSpeed = 0.05f;
 		CanDoNext = false;
-		oldBackground.guiTexture.color = new Color (0, 0, 0, 0);
-		while (oldBackground.guiTexture.color.a<0.5f) 
+		oldBackground.GetComponent<GUITexture>().color = new Color (0, 0, 0, 0);
+		while (oldBackground.GetComponent<GUITexture>().color.a<0.5f) 
 		{
-			oldBackground.guiTexture.color += new Color(0,0,0,FlashSpeed);
+			oldBackground.GetComponent<GUITexture>().color += new Color(0,0,0,FlashSpeed);
 			yield return null;
 		}
-		oldBackground.guiTexture.color = new Color (0, 0, 0, 0.5f);
-		thebackground.guiTexture.texture = Resources.Load<Texture> (BackgroundPath + back);
+		oldBackground.GetComponent<GUITexture>().color = new Color (0, 0, 0, 0.5f);
+		thebackground.GetComponent<GUITexture>().texture = Resources.Load<Texture> (BackgroundPath + back);
 		yield return null;
-		while (oldBackground.guiTexture.color.a > 0) 
+		while (oldBackground.GetComponent<GUITexture>().color.a > 0) 
 		{
-			oldBackground.guiTexture.color -= new Color(0,0,0,FlashSpeed);
+			oldBackground.GetComponent<GUITexture>().color -= new Color(0,0,0,FlashSpeed);
 			yield return null;
 		}
 		CanDoNext = true;
@@ -370,13 +414,13 @@ public class GameManaging : MonoBehaviour {
 		Text = "";
 		Author = "";
 		GameObject DayBack = new GameObject("dayback",typeof(GUITexture));
-		DayBack.guiTexture.texture = thebackground.guiTexture.texture;
+		DayBack.GetComponent<GUITexture>().texture = thebackground.GetComponent<GUITexture>().texture;
 		DayBack.transform.position = new Vector3 (0.5f, 0.5f, 15);
 		DayBack.transform.localScale = new Vector3 (1, 1, 0);
-		DayBack.guiTexture.color = new Color (0, 0, 0, 0);
-		while (DayBack.guiTexture.color.a<1)
+		DayBack.GetComponent<GUITexture>().color = new Color (0, 0, 0, 0);
+		while (DayBack.GetComponent<GUITexture>().color.a<1)
 		{
-			DayBack.guiTexture.color += new Color(0,0,0,FadeSpeed/5);
+			DayBack.GetComponent<GUITexture>().color += new Color(0,0,0,FadeSpeed/5);
 			yield return null;
 		}
 		yield return new WaitForSeconds (WaitTime);
@@ -392,21 +436,21 @@ public class GameManaging : MonoBehaviour {
 
 	static public bool PressLeft()
 	{
-		if ((Input.GetKeyDown(KeyCode.LeftArrow)) || (Click.OnClick(LeftArrow.guiTexture)) || (Input.GetAxis("Mouse ScrollWheel")>0))
+		if ((Input.GetKeyDown(KeyCode.LeftArrow)) || (Click.OnClick(LeftArrow.GetComponent<GUITexture>())) || (Input.GetAxis("Mouse ScrollWheel")>0))
 		    return true;
 		return false;
 	}
 
 	static public bool PressRight()
 	{
-		if ((Input.GetKeyDown(KeyCode.RightArrow)) || (Click.OnClick(RightArrow.guiTexture)) || (Input.GetAxis("Mouse ScrollWheel")<0))
+		if ((Input.GetKeyDown(KeyCode.RightArrow)) || (Click.OnClick(RightArrow.GetComponent<GUITexture>())) || (Input.GetAxis("Mouse ScrollWheel")<0))
 			return true;
 		return false;
 	}
 
 	static public bool PressSkip()
 	{
-		if ((Input.GetKey (KeyCode.LeftControl)) || (Click.OnPress(SkipArrow.guiTexture)))
+		if ((Input.GetKey (KeyCode.LeftControl)) || (Click.OnPress(SkipArrow.GetComponent<GUITexture>())))
 		{
 			return true;
 		}
@@ -415,16 +459,38 @@ public class GameManaging : MonoBehaviour {
 
 	static public bool PressAuto()
 	{
-		if ((Input.GetKeyDown(KeyCode.A)) || (Click.OnClick(AutoButton.guiTexture)))
+		if ((Input.GetKeyDown(KeyCode.A)) || (Click.OnClick(AutoButton.GetComponent<GUITexture>())))
 			return true;
 		return false;
 	}
 
 	private void DependOnMouse(GameObject target)
 	{
-		if (Click.MouseOver(target.guiTexture))
-			target.guiTexture.color = OnMouse;
+		if (Click.MouseOver(target.GetComponent<GUITexture>()))
+			target.GetComponent<GUITexture>().color = OnMouse;
 		else
-			target.guiTexture.color = StandartColor;
+			target.GetComponent<GUITexture>().color = StandartColor;
+	}
+
+	static public void TextFormOn()
+	{
+		TextForm.SetActive (true);
+	}
+
+	static public void TextFormOff()
+	{
+		TextForm.SetActive (false);
+	}
+
+	static IEnumerator WaitAuto(int tlength)
+	{
+		int time = 0;
+		while ((float)time/20<Settings.AutoTime + tlength*Settings.AutoMultiplier)
+		{
+			time++;
+			if (((PressForward()) || (PressSkip()) || (PressAuto())) && (!BackMode))
+				break;
+			yield return null;
+		}
 	}
 }

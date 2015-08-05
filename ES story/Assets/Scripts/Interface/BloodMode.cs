@@ -7,8 +7,8 @@ public class BloodMode : MonoBehaviour {
 	Color CurrentColor;
 	// Use this for initialization
 	void Start () {
-		StandartColor = this.guiTexture.color;
-		this.guiTexture.color = new Color (0, 0, 0, 0);
+		StandartColor = this.GetComponent<GUITexture>().color;
+		this.GetComponent<GUITexture>().color = new Color (0, 0, 0, 0);
 	}
 	
 	// Update is called once per frame
@@ -17,7 +17,7 @@ public class BloodMode : MonoBehaviour {
 			CurrentColor = StandartColor;
 		else
 			CurrentColor = new Color(0,0,0,0);
-		if (this.guiTexture.color != CurrentColor)
-			this.guiTexture.color = CurrentColor;
+		if (this.GetComponent<GUITexture>().color != CurrentColor)
+			this.GetComponent<GUITexture>().color = CurrentColor;
 	}
 }

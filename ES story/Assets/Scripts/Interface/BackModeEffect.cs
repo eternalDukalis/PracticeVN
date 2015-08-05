@@ -8,9 +8,9 @@ public class BackModeEffect : MonoBehaviour {
 	Color CurrentColor;
 	// Use this for initialization
 	void Start () {
-		Vis = this.guiTexture.color;
+		Vis = this.GetComponent<GUITexture>().color;
 		Invis = new Color (0, 0, 0, 0);
-		this.guiTexture.color = Invis;
+		this.GetComponent<GUITexture>().color = Invis;
 	}
 	
 	// Update is called once per frame
@@ -19,7 +19,7 @@ public class BackModeEffect : MonoBehaviour {
 			CurrentColor = Vis;
 		else
 			CurrentColor = Invis;
-		if (CurrentColor!=this.guiTexture.color)
-			this.guiTexture.color = CurrentColor;
+		if (CurrentColor!=this.GetComponent<GUITexture>().color)
+			this.GetComponent<GUITexture>().color = CurrentColor;
 	}
 }

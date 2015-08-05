@@ -23,15 +23,15 @@ public class MenuMouseOn : MonoBehaviour {
 	void OnGUI()
 	{
 		if ((Application.platform == RuntimePlatform.WindowsEditor) || (Application.platform == RuntimePlatform.WindowsPlayer))
-			if (Click.MouseOver(this.guiText))
-				this.guiText.color = OnMouse;
+			if (Click.MouseOver(this.GetComponent<GUIText>()))
+				this.GetComponent<GUIText>().color = OnMouse;
 			else
-				this.guiText.color = standartColor;
+				this.GetComponent<GUIText>().color = standartColor;
 	}
 
 	void Init()
 	{
-		standartColor = this.guiText.color;
+		standartColor = this.GetComponent<GUIText>().color;
 		OnMouse = new Color (OnMouse.r, OnMouse.g, OnMouse.b, standartColor.a);
 	}
 }

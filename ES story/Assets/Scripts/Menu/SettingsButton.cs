@@ -10,7 +10,7 @@ public class SettingsButton : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Click.OnClick(this.guiText))
+		if (Click.OnClick(this.GetComponent<GUIText>()))
 		{
 			MenuMoving mm = GameObject.FindObjectOfType<MenuMoving>();
 			mm.YMove(1);

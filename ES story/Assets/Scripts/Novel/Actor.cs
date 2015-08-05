@@ -10,7 +10,7 @@ public class Actor {
 	static private float MoveSpeed = 0.01f;
 	static private float ColorChangeSpeed = 0.025f;
 	static public string LocalPath = "Graphics/Sprites/";
-
+	
 	private string apath;
 	private GameObject MainSprite;
 	private GameObject EmotionSprite;
@@ -34,8 +34,8 @@ public class Actor {
 
 	public void ChangeSprite (string title)
 	{
-		MainSprite.guiTexture.texture = Resources.Load<Texture>(LocalPath + apath + "/Bodies/" + title[0]);
-		EmotionSprite.guiTexture.texture = Resources.Load<Texture>(LocalPath + apath + "/Emotions/" + title);
+		MainSprite.GetComponent<GUITexture>().texture = Resources.Load<Texture>(LocalPath + apath + "/Bodies/" + title[0]);
+		EmotionSprite.GetComponent<GUITexture>().texture = Resources.Load<Texture>(LocalPath + apath + "/Emotions/" + title);
 	}
 	
 	public void SetSprite(Side position, string emotion)
@@ -109,8 +109,8 @@ public class Actor {
 		EmotionSprite = new GameObject(string.Format("{0}_emotion",Name),typeof(GUITexture));
 		EmotionSprite.transform.parent = MainSprite.transform;
 		isActive = true;
-		MainSprite.guiTexture.color = new Color (0.5f, 0.5f, 0.5f, 0);
-		EmotionSprite.guiTexture.color = new Color (0.5f, 0.5f, 0.5f, 0);
+		MainSprite.GetComponent<GUITexture>().color = new Color (0.5f, 0.5f, 0.5f, 0);
+		EmotionSprite.GetComponent<GUITexture>().color = new Color (0.5f, 0.5f, 0.5f, 0);
 		switch (position)
 		{
 		case Side.Center:
@@ -123,14 +123,17 @@ public class Actor {
 			MainSprite.transform.position = new Vector3(0.8f,0.25f,0);
 			break;
 		}
-		MainSprite.guiTexture.texture = Resources.Load<Texture>(LocalPath + apath + "/Bodies/" + emotion[0]);
-		EmotionSprite.guiTexture.texture = Resources.Load<Texture>(LocalPath + apath + "/Emotions/" + emotion);
-		EmotionSprite.transform.position += new Vector3 (0, 0.5f-(float)MainSprite.guiTexture.texture.width/2/MainSprite.guiTexture.texture.height, 0.25f);
-		MainSprite.transform.localScale = new Vector3 (Height*MainSprite.guiTexture.texture.width*Screen.height/MainSprite.guiTexture.texture.height/Screen.width, Height, 0);
-		EmotionSprite.transform.localScale = new Vector3 (1, (float)MainSprite.guiTexture.texture.width/MainSprite.guiTexture.texture.height, 0);
-		while (MainSprite.guiTexture.color.a<0.5f) {
-			MainSprite.guiTexture.color += new Color(0,0,0,ColorChangeSpeed);
-			EmotionSprite.guiTexture.color += new Color(0,0,0,ColorChangeSpeed);
+		MainSprite.GetComponent<GUITexture>().texture = Resources.Load<Texture>(LocalPath + apath + "/Bodies/" + emotion[0]);
+		EmotionSprite.GetComponent<GUITexture>().texture = Resources.Load<Texture>(LocalPath + apath + "/Emotions/" + emotion);
+		/*Texture azaz = MainSprite.guiTexture.texture;
+		azaz += EmotionSprite.guiTexture.texture;
+		MainSprite.guiTexture.texture = azaz;*/
+		EmotionSprite.transform.position += new Vector3 (0, 0.5f-(float)MainSprite.GetComponent<GUITexture>().texture.width/2/MainSprite.GetComponent<GUITexture>().texture.height, 0.25f);
+		MainSprite.transform.localScale = new Vector3 (Height*MainSprite.GetComponent<GUITexture>().texture.width*Screen.height/MainSprite.GetComponent<GUITexture>().texture.height/Screen.width, Height, 0);
+		EmotionSprite.transform.localScale = new Vector3 (1, (float)MainSprite.GetComponent<GUITexture>().texture.width/MainSprite.GetComponent<GUITexture>().texture.height, 0);
+		while (MainSprite.GetComponent<GUITexture>().color.a<0.5f) {
+			MainSprite.GetComponent<GUITexture>().color += new Color(0,0,0,ColorChangeSpeed);
+			EmotionSprite.GetComponent<GUITexture>().color += new Color(0,0,0,ColorChangeSpeed);
 			yield return null;
 		}
 		yield return null;
@@ -144,8 +147,8 @@ public class Actor {
 		EmotionSprite = new GameObject(string.Format("{0}_emotion",Name),typeof(GUITexture));
 		EmotionSprite.transform.parent = MainSprite.transform;
 		isActive = true;
-		MainSprite.guiTexture.color = new Color (0.5f, 0.5f, 0.5f, 0.5f);
-		EmotionSprite.guiTexture.color = new Color (0.5f, 0.5f, 0.5f, 0.5f);
+		MainSprite.GetComponent<GUITexture>().color = new Color (0.5f, 0.5f, 0.5f, 0.5f);
+		EmotionSprite.GetComponent<GUITexture>().color = new Color (0.5f, 0.5f, 0.5f, 0.5f);
 		float finalPosition = 0;
 		switch (position)
 		{
@@ -171,11 +174,11 @@ public class Actor {
 			MainSprite.transform.position = new Vector3(1.2f,0.25f,0);
 			break;
 		}
-		MainSprite.guiTexture.texture = Resources.Load<Texture>(LocalPath + apath + "/Bodies/" + emotion[0]);
-		EmotionSprite.guiTexture.texture = Resources.Load<Texture>(LocalPath + apath + "/Emotions/" + emotion);
-		EmotionSprite.transform.position += new Vector3 (0, 0.5f-(float)MainSprite.guiTexture.texture.width/2/MainSprite.guiTexture.texture.height, 0.25f);
-		MainSprite.transform.localScale = new Vector3 (Height*MainSprite.guiTexture.texture.width*Screen.height/MainSprite.guiTexture.texture.height/Screen.width, Height, 0);
-		EmotionSprite.transform.localScale = new Vector3 (1, (float)MainSprite.guiTexture.texture.width/MainSprite.guiTexture.texture.height, 0);
+		MainSprite.GetComponent<GUITexture>().texture = Resources.Load<Texture>(LocalPath + apath + "/Bodies/" + emotion[0]);
+		EmotionSprite.GetComponent<GUITexture>().texture = Resources.Load<Texture>(LocalPath + apath + "/Emotions/" + emotion);
+		EmotionSprite.transform.position += new Vector3 (0, 0.5f-(float)MainSprite.GetComponent<GUITexture>().texture.width/2/MainSprite.GetComponent<GUITexture>().texture.height, 0.25f);
+		MainSprite.transform.localScale = new Vector3 (Height*MainSprite.GetComponent<GUITexture>().texture.width*Screen.height/MainSprite.GetComponent<GUITexture>().texture.height/Screen.width, Height, 0);
+		EmotionSprite.transform.localScale = new Vector3 (1, (float)MainSprite.GetComponent<GUITexture>().texture.width/MainSprite.GetComponent<GUITexture>().texture.height, 0);
 		Direction = 1;
 		if (finalPosition < MainSprite.transform.position.x)
 			Direction = -1;
@@ -188,9 +191,9 @@ public class Actor {
 	private IEnumerator delete()
 	{
 		if (isActive) {
-			while (MainSprite.guiTexture.color.a>0) {
-				MainSprite.guiTexture.color -= new Color(0,0,0,ColorChangeSpeed);
-				EmotionSprite.guiTexture.color -= new Color(0,0,0,ColorChangeSpeed*2);
+			while (MainSprite.GetComponent<GUITexture>().color.a>0) {
+				MainSprite.GetComponent<GUITexture>().color -= new Color(0,0,0,ColorChangeSpeed);
+				EmotionSprite.GetComponent<GUITexture>().color -= new Color(0,0,0,ColorChangeSpeed*2);
 				yield return null;
 			}
 			MonoBehaviour.Destroy (MainSprite);

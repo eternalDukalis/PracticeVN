@@ -10,7 +10,7 @@ public class QuitButton : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Click.OnClick(this.guiText))
+		if (Click.OnClick(this.GetComponent<GUIText>()))
 		{
 			QuitScreen scr = GameObject.FindObjectOfType<QuitScreen>();
 			scr.MakeVisible();

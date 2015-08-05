@@ -8,19 +8,19 @@ public class ArrowColorChange : MonoBehaviour {
 	public Color OnMouse;
 	// Use this for initialization
 	void Start () {
-		StandartColor = this.guiTexture.color;
+		StandartColor = this.GetComponent<GUITexture>().color;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (PlayingPlatform.isPC())
 		{
-			if (Click.MouseOver(this.guiTexture))
+			if (Click.MouseOver(this.GetComponent<GUITexture>()))
 				CurrentColor = OnMouse;
 			else
 				CurrentColor = StandartColor;
-			if (CurrentColor!=this.guiTexture.color)
-				this.guiTexture.color = CurrentColor;
+			if (CurrentColor!=this.GetComponent<GUITexture>().color)
+				this.GetComponent<GUITexture>().color = CurrentColor;
 		}
 	}
 }

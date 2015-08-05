@@ -9,7 +9,8 @@ public class AutoText : MonoBehaviour {
 	Color CurrentColor;
 	// Use this for initialization
 	void Start () {
-		standartColor = this.guiTexture.color;
+		standartColor = this.GetComponent<GUITexture>().color;
+		CurrentColor = standartColor;
 		myCircle = GameObject.FindGameObjectWithTag("AutoCircle");
 	}
 	
@@ -17,7 +18,7 @@ public class AutoText : MonoBehaviour {
 	void Update () {
 		if (PlayingPlatform.isPC())
 		{
-			if (Click.MouseOver (myCircle.guiTexture)) 
+			if (Click.MouseOver (myCircle.GetComponent<GUITexture>())) 
 			{
 				CurrentColor = OnMouse;
 			} 
@@ -26,7 +27,7 @@ public class AutoText : MonoBehaviour {
 				CurrentColor = standartColor;
 			}
 		}
-		if (this.guiTexture.color!=CurrentColor)
-			this.guiTexture.color = CurrentColor;
+		if (this.GetComponent<GUITexture>().color!=CurrentColor)
+			this.GetComponent<GUITexture>().color = CurrentColor;
 	}
 }

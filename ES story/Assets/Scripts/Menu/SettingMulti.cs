@@ -10,13 +10,13 @@ public class SettingMulti : MonoBehaviour {
 	Color standartColor;
 	// Use this for initialization
 	void Start () {
-		standartColor = this.guiText.color;
+		standartColor = this.GetComponent<GUIText>().color;
 		OnGUI ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (Click.OnClick(this.guiText))
+		if (Click.OnClick(this.GetComponent<GUIText>()))
 		{
 			if (isText)
 			{
@@ -39,11 +39,11 @@ public class SettingMulti : MonoBehaviour {
 		else
 			condition = Mode==Settings.AutoMode;
 		if (condition)
-			this.guiText.color = standartColor;
+			this.GetComponent<GUIText>().color = standartColor;
 		else
-			this.guiText.color = unavailableColor;
+			this.GetComponent<GUIText>().color = unavailableColor;
 		if ((Application.platform == RuntimePlatform.WindowsEditor) || (Application.platform == RuntimePlatform.WindowsPlayer))
-			if (Click.MouseOver(this.guiText))
-				this.guiText.color = this.guiText.color*MouseOn;
+			if (Click.MouseOver(this.GetComponent<GUIText>()))
+				this.GetComponent<GUIText>().color = this.GetComponent<GUIText>().color*MouseOn;
 	}
 }

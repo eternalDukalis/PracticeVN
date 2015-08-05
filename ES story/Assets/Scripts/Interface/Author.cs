@@ -22,8 +22,8 @@ public class Author : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (this.guiText.text!=GameManaging.Author)
-			this.guiText.text = GameManaging.Author;
+		if (this.GetComponent<GUIText>().text!=GameManaging.Author)
+			this.GetComponent<GUIText>().text = GameManaging.Author;
 		switch (GameManaging.Author) 
 		{
 		case "Алиса":
@@ -63,7 +63,7 @@ public class Author : MonoBehaviour {
 			CurrentColor = new Color(1,1,1,1);
 			break;
 		}
-		if (this.guiText.color!=CurrentColor)
-			this.guiText.color = CurrentColor;
+		if (this.GetComponent<GUIText>().color!=CurrentColor)
+			this.GetComponent<GUIText>().color = CurrentColor;
 	}
 }

@@ -31,17 +31,17 @@ public class AudioStream {
 
 		//MonoBehaviour.Destroy(MainSound);
 		MainSound = new GameObject(title,typeof(AudioSource));
-		MainSound.audio.playOnAwake = false;
-		MainSound.audio.clip = Resources.Load<AudioClip>(spath+title);
+		MainSound.GetComponent<AudioSource>().playOnAwake = false;
+		MainSound.GetComponent<AudioSource>().clip = Resources.Load<AudioClip>(spath+title);
 		MainSound.transform.position = new Vector3(0,0,-8);
-		MainSound.audio.loop = itsloop;
-		MainSound.audio.volume = thevol;
-		while (!MainSound.audio.clip.isReadyToPlay)
+		MainSound.GetComponent<AudioSource>().loop = itsloop;
+		MainSound.GetComponent<AudioSource>().volume = thevol;
+		while (!MainSound.GetComponent<AudioSource>().clip.isReadyToPlay)
 		{
 			Debug.Log("lil");
 			yield return null;
 		}
-		MainSound.audio.Play();
+		MainSound.GetComponent<AudioSource>().Play();
 	}
 
 	public void Stop()
@@ -58,9 +58,9 @@ public class AudioStream {
 
 	private IEnumerator FadeOut(GameObject currentStream)
 	{
-		while (currentStream.audio.volume>0) 
+		while (currentStream.GetComponent<AudioSource>().volume>0) 
 		{
-			currentStream.audio.volume -= FadeOutSpeed;
+			currentStream.GetComponent<AudioSource>().volume -= FadeOutSpeed;
 			yield return null;
 		}
 		MonoBehaviour.Destroy (currentStream);

@@ -235,7 +235,7 @@ public class Scenario : MonoBehaviour {
 		PushText ("И снова в голове начали возникать увлекательные (идиотские, точнее, мысли)."); yield return StartCoroutine (WaitNext ());
 		PushText ("Интересно, если бы я прямо в этот момент писал книгу о себе, то что именно писал?"); yield return StartCoroutine (WaitNext ());
 		PushText ("Привет, меня зовут Семён! Я живу в городе Пхе, закончил школу Кхе, теперь же родители отправили меня против моей же воли в какой-то сраный лагерь."); yield return StartCoroutine (WaitNext ());
-		PushText ("Учился я так себе, и был тем ещё остолопом. Может, умей я прилагать усилия, я мог бы стать отличником. Поступил бы институт, стал бы профессором, исследователем, светлом науки!"); yield return StartCoroutine (WaitNext ());
+		PushText ("Учился я так себе, и был тем ещё остолопом. Может, умей я прилагать усилия, я мог бы стать отличником. Поступил бы в институт, стал бы профессором, исследователем, светилом науки!"); yield return StartCoroutine (WaitNext ());
 		PushText ("И место мне тогда в кружке кибернетиков!","Семён"); yield return StartCoroutine (WaitNext ());
 		ChangeBackground (Club_screen); yield return StartCoroutine (WaitNext ());
 		ChangeBackground (Square_night); yield return StartCoroutine (WaitNext ());
@@ -286,7 +286,7 @@ public class Scenario : MonoBehaviour {
 		PushText ("Потом я сам заставлял себя подниматься, чтобы лишний раз не получать по шее."); yield return StartCoroutine (WaitNext ());
 		PushText ("Затем же я немного попривык, и, ложась часов в 11 вечера, просыпался вовремя без лишних усилий."); yield return StartCoroutine (WaitNext ());
 		PushText ("На самом деле, это оказалось не так уж и плохо. День так кажется намного длинней, и можно сделать больше всяких интересных вещей."); yield return StartCoroutine (WaitNext ());
-		PushText ("Только в этом местечке этих вещей не особо много."); yield return StartCoroutine (WaitNext ());
+		PushText ("Только в этом местечке таких вещей не особо много."); yield return StartCoroutine (WaitNext ());
 		ChangeBackground (Washstand); yield return StartCoroutine (WaitNext ());
 		PushText ("И вот я уже размазываю по лицу свежую порцию ледяной воды и потихоньку прихожу в себя."); yield return StartCoroutine (WaitNext ());
 		PushText ("Энергично чищу зубы, затем ополаскиваю руки, лицо, мочу себе голову (жара же) и закрываю кран."); yield return StartCoroutine (WaitNext ());
@@ -1120,7 +1120,9 @@ public class Scenario : MonoBehaviour {
 		Zhenya.Delete ();
 		PushText ("Я пошёл к полкам с книгами и взял первую попавшуюся."); yield return StartCoroutine (WaitNext ());
 		PushText ("…"); yield return StartCoroutine (WaitNext ());
+		GameManaging.TextFormOff ();
 		Flash (); yield return StartCoroutine (WaitNext ());
+		GameManaging.TextFormOn ();
 		PushText ("Где-то в течение часа я читал какую-то ерунду про классовую борьбу и ждал, когда уже начнётся экшн."); yield return StartCoroutine (WaitNext ());
 		PushText ("Нет, мне надоело!"); yield return StartCoroutine (WaitNext ());
 		PushText ("Я начал просматривать другие книги."); yield return StartCoroutine (WaitNext ());
@@ -1162,7 +1164,9 @@ public class Scenario : MonoBehaviour {
 		PushText ("Кажется, я чего-то недопонимаю."); yield return StartCoroutine (WaitNext ());
 		PushText ("Может, стоит спросить у самого Электроника."); yield return StartCoroutine (WaitNext ());
 		PushText ("…"); yield return StartCoroutine (WaitNext ());
+		GameManaging.TextFormOff ();
 		Flash (); yield return StartCoroutine (WaitNext ());
+		GameManaging.TextFormOn ();
 		Effects.Stop ();
 		PushText ("Неподметённая зона внезапно кончилась."); yield return StartCoroutine (WaitNext ());
 		Slavya.SetSprite (Actor.Side.Right, "1smile", Actor.Side.Right);
@@ -1859,7 +1863,9 @@ public class Scenario : MonoBehaviour {
 		PushText ("Ага.","Семён"); yield return StartCoroutine (WaitNext ());
 		Alice.Delete ();
 		PushText ("…"); yield return StartCoroutine (WaitNext ());
+		GameManaging.TextFormOff ();
 		Flash (); yield return StartCoroutine (WaitNext ());
+		GameManaging.TextFormOn ();
 		Music.Play ("Goodbye Home Shores");
 		PushText ("Спустя некоторое время, мы уже оттирали сажу с Генды."); yield return StartCoroutine (WaitNext ());
 		PushText ("Как тебе вообще такое в голову взбрело?","Семён"); yield return StartCoroutine (WaitNext ());
@@ -2154,7 +2160,9 @@ public class Scenario : MonoBehaviour {
 		PushText ("Мыть всё это в одиночку будет долго, но зато безопасней для моих ушей."); yield return StartCoroutine (WaitNext ());
 		PushText ("А она, может, и правда что-нибудь годное сочинит."); yield return StartCoroutine (WaitNext ());
 		PushText ("…"); yield return StartCoroutine (WaitNext ());
+		GameManaging.TextFormOff ();
 		Flash (); yield return StartCoroutine (WaitNext ());
+		GameManaging.TextFormOn ();
 		PushText ("Фух, я так устал."); yield return StartCoroutine (WaitNext ());
 		PushText ("Зато комната теперь блестит!"); yield return StartCoroutine (WaitNext ());
 		PushText ("К инструментам я бережно отнёсся, вроде ничего не пострадало."); yield return StartCoroutine (WaitNext ());
@@ -2479,7 +2487,9 @@ public class Scenario : MonoBehaviour {
 		Electronic.Delete ();
 		Shurik.Delete ();
 		PushText ("…"); yield return StartCoroutine (WaitNext ());
+		GameManaging.TextFormOff ();
 		Flash (); yield return StartCoroutine (WaitNext ());
+		GameManaging.TextFormOn ();
 		PushText ("Все потихоньку начали садиться вокруг костра."); yield return StartCoroutine (WaitNext ());
 		PushText ("Кроме почему-то отсутствующих Слави, Саши и Лены."); yield return StartCoroutine (WaitNext ());
 		PushText ("Мы начали играть в города"); yield return StartCoroutine (WaitNext ());
@@ -2493,7 +2503,7 @@ public class Scenario : MonoBehaviour {
 		ChangeBackground (Square_night); yield return StartCoroutine (WaitNext ());
 		PushText ("Преодолев небольшое расстояние от поляны до лагеря, мы снова оказались в самом его сердце."); yield return StartCoroutine (WaitNext ());
 		Olga.SetSprite(Actor.Side.Center,"1normal");
-		PushText ("На площади пионеры уже разошлись кто куда, а мы с Ольга Дмитриевной отправились к себе."); yield return StartCoroutine (WaitNext ());
+		PushText ("На площади пионеры уже разошлись кто куда, а мы с Ольгой Дмитриевной отправились к себе."); yield return StartCoroutine (WaitNext ());
 		ChangeBackground (House_of_mt_night); yield return StartCoroutine (WaitNext ());
 		Olga.ChangeSprite ("1smile");
 		PushText ("Ну как, тебе понравилось в походе?","Ольга Дмитриевна"); yield return StartCoroutine (WaitNext ());
@@ -2755,7 +2765,9 @@ public class Scenario : MonoBehaviour {
 		PushText ("Угу.","Славя"); yield return StartCoroutine (WaitNext ());
 		Slavya.Delete ();
 		PushText ("…"); yield return StartCoroutine (WaitNext ());
+		GameManaging.TextFormOff ();
 		Flash (); yield return StartCoroutine (WaitNext ());
+		GameManaging.TextFormOn ();
 		PushText ("Вдвоём работа пошла веселей."); yield return StartCoroutine (WaitNext ());
 		Slavya.SetSprite (Actor.Side.Center, "1normal");
 		PushText ("Готов к отъезду?","Славя"); yield return StartCoroutine (WaitNext ());
@@ -2850,7 +2862,9 @@ public class Scenario : MonoBehaviour {
 		PushText ("Почти тщательно."); yield return StartCoroutine (WaitNext ());
 		Music.Stop ();
 		PushText ("…"); yield return StartCoroutine (WaitNext ());
+		GameManaging.TextFormOff ();
 		Flash (); yield return StartCoroutine (WaitNext ());
+		GameManaging.TextFormOn ();
 		PushText ("Прошло около получаса."); yield return StartCoroutine (WaitNext ());
 		PushText ("Странно. Говорила, что мигом."); yield return StartCoroutine (WaitNext ());
 		Effects.ChangeSound("shagi");
@@ -2877,7 +2891,9 @@ public class Scenario : MonoBehaviour {
 		PushText ("Ну тогда разливай!","Алиса"); yield return StartCoroutine (WaitNext ());
 		Alice.Delete ();
 		PushText ("…"); yield return StartCoroutine (WaitNext ());
+		GameManaging.TextFormOff ();
 		Flash (); yield return StartCoroutine (WaitNext ());
+		GameManaging.TextFormOn ();
 		Alice.SetSprite (Actor.Side.Center, "4laugh");
 		Music.Play ("Memories");
 		PushText ("И так с каждым новым тостом вечер становился всё веселей."); yield return StartCoroutine (WaitNext ());
@@ -2885,7 +2901,9 @@ public class Scenario : MonoBehaviour {
 		PushText ("Всё, что мы пели, звучало отвратительно, потому что я, например, забыл, что на каких ладах играть, и путался в простейших вещах, а уж о вокале я молчу."); yield return StartCoroutine (WaitNext ());
 		PushText ("Но зато нам было весело, и это главное."); yield return StartCoroutine (WaitNext ());
 		Alice.Delete ();
+		GameManaging.TextFormOff ();
 		Flash (); yield return StartCoroutine (WaitNext ());
+		GameManaging.TextFormOn ();
 		PushText ("Постепенно бутылка опустела, а вместе с этим начало угасать веселье."); yield return StartCoroutine (WaitNext ());
 		PushText ("Я поставил гитару в угол и сел на кровать рядом с Алисой."); yield return StartCoroutine (WaitNext ());
 		PushText ("Почти сразу же я начал погружаться в какое-то непонятное состояние, похожее на полусон, но меня вывел из него какой-то предмет, давивший на плечо."); yield return StartCoroutine (WaitNext ());
@@ -3058,7 +3076,9 @@ public class Scenario : MonoBehaviour {
 		Music.Stop ();
 		PushText ("…"); yield return StartCoroutine (WaitNext ());
 		Environment.ChangeSound ("bus");
+		GameManaging.TextFormOff ();
 		Flash (); yield return StartCoroutine (WaitNext ());
+		GameManaging.TextFormOn ();
 		PushText ("В салоне я заметил два свободных места."); yield return StartCoroutine (WaitNext ());
 		PushText ("Я оглядел автобус и не нашёл Лену и Санёчка."); yield return StartCoroutine (WaitNext ());
 		PushText ("А где Лена и Саша?","Семён"); yield return StartCoroutine (WaitNext ());
@@ -3088,7 +3108,9 @@ public class Scenario : MonoBehaviour {
 		PushText ("Я закрыл глаза, и сон не заставил себя долго ждать."); yield return StartCoroutine (WaitNext ());
 		Environment.Stop ();
 		PushText ("…"); yield return StartCoroutine (WaitNext ());
-		Flash(Stars); yield return StartCoroutine (WaitNext ());
+		GameManaging.TextFormOff ();
+		Flash (Stars); yield return StartCoroutine (WaitNext ());
+		GameManaging.TextFormOn ();
 		PushText ("Да проснись уже!","Голос"); yield return StartCoroutine (WaitNext ());
 		Environment.Play ("grasshopers");
 		ChangeBackground (Bus_in_night_empty); yield return StartCoroutine (WaitNext ());
@@ -3166,15 +3188,19 @@ public class Scenario : MonoBehaviour {
 		Environment.Stop ();
 		Music.Stop ();
 		PushText ("И я исчез."); yield return StartCoroutine (WaitNext ());
+		GameManaging.TextFormOff ();
 		Flash(Stars); yield return StartCoroutine (WaitNext ());
 		Flash(); yield return StartCoroutine (WaitNext ());
 		Flash(); yield return StartCoroutine (WaitNext ());
+		GameManaging.TextFormOn ();
 		PushText ("Нет, я не только пропал оттуда, где был, а именно исчез."); yield return StartCoroutine (WaitNext ());
 		PushText ("Само я перестало существовать, сама моя суть."); yield return StartCoroutine (WaitNext ());
 		PushText ("Или нет, скорее, я её просто утратил."); yield return StartCoroutine (WaitNext ());
 		PushText ("Всё кончено?"); yield return StartCoroutine (WaitNext ());
 		PushText ("…"); yield return StartCoroutine (WaitNext ());
-		Flash(); yield return StartCoroutine (WaitNext ());
+		GameManaging.TextFormOff ();
+		Flash (); yield return StartCoroutine (WaitNext ());
+		GameManaging.TextFormOn ();
 		Music.Play ("Farewell To the Past");
 		PushText ("Я плыву."); yield return StartCoroutine (WaitNext ());
 		PushText ("Бесконечно дрейфую где-то."); yield return StartCoroutine (WaitNext ());
@@ -3361,15 +3387,13 @@ public class Scenario : MonoBehaviour {
 
 	void PushText(string text)
 	{
-		text = text.Insert (0, "\t");
-		GameManaging.stText.AddString (text, "");
+		GameManaging.stText.AddString ("    "+text, "");
 		StartCoroutine (GameManaging.PushText (text));
 	}
 	
 	void PushText(string text, string author)
 	{
-		text = text.Insert (0, "\t");
-		GameManaging.stText.AddString (text, author);
+		GameManaging.stText.AddString ("    "+text, author);
 		StartCoroutine (GameManaging.PushText (text, author));
 	}
 

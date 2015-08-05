@@ -16,7 +16,7 @@ public class BeginDay : MonoBehaviour {
 	void Update () {
 		if (NeedInit)
 			Init ();
-		if ((CanClick) && (Click.OnClick(this.guiText)))
+		if ((CanClick) && (Click.OnClick(this.GetComponent<GUIText>())))
 		{
 			Scenario.CurrentLevel = DayNum;
 			LoadScreen scr = GameObject.FindObjectOfType<LoadScreen>();
@@ -30,7 +30,7 @@ public class BeginDay : MonoBehaviour {
 		//Debug.Log ("beg "+Scenario.MaxLevel+" ||| "+DayNum);
 		if (DayNum>Scenario.MaxLevel)
 		{
-			this.guiText.color = UnavailableColor;
+			this.GetComponent<GUIText>().color = UnavailableColor;
 			CanClick = false;
 		}
 		NeedInit = false;

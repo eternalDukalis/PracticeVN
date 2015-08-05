@@ -7,7 +7,7 @@ public class QuitScreen : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		standartColor = new Color(0.5f,0.5f,0.5f,0.5f);
-		this.guiTexture.color = new Color (0, 0, 0, 0);
+		this.GetComponent<GUITexture>().color = new Color (0, 0, 0, 0);
 	}
 	
 	// Update is called once per frame
@@ -17,6 +17,6 @@ public class QuitScreen : MonoBehaviour {
 
 	public void MakeVisible()
 	{
-		this.guiTexture.color = standartColor;
+		this.GetComponent<GUITexture>().color = standartColor;
 	}
 }
