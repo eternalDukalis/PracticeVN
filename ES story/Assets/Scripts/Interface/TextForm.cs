@@ -9,6 +9,7 @@ public class TextForm : MonoBehaviour {
 	public GUIStyle TextStyle;
 	void Start ()
 	{
+		GameManaging.TextWidth = this.GetComponent<GUITexture> ().GetScreenRect ().width - 2 * TextBoard;
 		TextBoard *= Screen.height;
 		TextStyle.fontSize = (int)(TextSize * Screen.height);
 		//this.transform.localScale = new Vector3 (YScale*this.guiTexture.texture.width * Screen.height / this.guiTexture.texture.height / Screen.width, YScale, 0);
@@ -17,7 +18,6 @@ public class TextForm : MonoBehaviour {
 
 	void Update () 
 	{
-	
 	}
 
 	void OnGUI()

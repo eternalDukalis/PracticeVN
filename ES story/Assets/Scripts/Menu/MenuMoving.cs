@@ -36,9 +36,9 @@ public class MenuMoving : MonoBehaviour {
 		int Direction = 1;
 		if (this.transform.position.x>target)
 			Direction = -1;
-		while ((this.transform.position.x<target-Direction*MoveSpeed)==(Direction==1))
+		while ((this.transform.position.x<target-Direction*MoveSpeed*Time.deltaTime)==(Direction==1))
 		{
-			this.transform.position += new Vector3(Direction*MoveSpeed,0,0);
+			this.transform.position += new Vector3(Direction*MoveSpeed*Time.deltaTime,0,0);
 			yield return null;
 		}
 		this.transform.position = new Vector3 (target, this.transform.position.y, this.transform.position.z);
@@ -49,9 +49,9 @@ public class MenuMoving : MonoBehaviour {
 		int Direction = 1;
 		if (this.transform.position.y>target)
 			Direction = -1;
-		while ((this.transform.position.y<target-Direction*MoveSpeed)==(Direction==1))
+		while ((this.transform.position.y<target-Direction*MoveSpeed*Time.deltaTime)==(Direction==1))
 		{
-			this.transform.position += new Vector3(0,Direction*MoveSpeed,0);
+			this.transform.position += new Vector3(0,Direction*MoveSpeed*Time.deltaTime,0);
 			yield return null;
 		}
 		this.transform.position = new Vector3 (this.transform.position.x, target, this.transform.position.z);

@@ -8,7 +8,7 @@ public class Settings : MonoBehaviour {
 	static public bool EffectsOn = true;
 	static public int TextMode = 2;
 	static public int AutoMode = 2;
-	static public int TextSpeed = 3;
+	static public float TextSpeed = 0.075f;
 	static public float AutoTime = 1;
 	static public float AutoMultiplier = 0.03f;
 	static public bool hasLoaded = false;
@@ -34,13 +34,13 @@ public class Settings : MonoBehaviour {
 		switch (TextMode)
 		{
 		case 1:
-			TextSpeed = 1;
+			TextSpeed = 0.025f;
 			break;
 		case 2:
-			TextSpeed = 3;
+			TextSpeed = 0.075f;
 			break;
 		case 3:
-			TextSpeed = 5;
+			TextSpeed = 0.125f;
 			break;
 		}
 		switch (AutoMode)

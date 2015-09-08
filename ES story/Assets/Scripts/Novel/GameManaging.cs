@@ -21,12 +21,13 @@ public class GameManaging : MonoBehaviour {
 	static public bool AutoMode = false;
 	static public GameObject AutoButton;
 	static private string BackgroundPath = "Graphics/Backgrounds/";
-	static public float FadeSpeed = 0.035f;
+	static public float FadeSpeed = 0.7f;
 	static public bool BloodMode = false;
 	static string targetText;
 	static public GameObject TextForm;
 	static GameManaging gm;
 	static GameObject skp;
+	static public float TextWidth;
 	static string titresText = "Спасибо за прочтение! \n " +
 		"История полностью вымышлена,\n" +
 		"все совпадения с реальностью случайны.\n" +
@@ -103,6 +104,7 @@ public class GameManaging : MonoBehaviour {
 		}
 		if (BackMode)
 		{
+			TextForm.GetComponent<TextForm>().TextStyle.wordWrap = true;
 			if ((PressLeft()) && (currentBack<stText.Size-1))
 			{
 				currentBack++;
@@ -129,6 +131,8 @@ public class GameManaging : MonoBehaviour {
 				BackMode = false;
 			}
 		}
+		else
+			TextForm.GetComponent<TextForm>().TextStyle.wordWrap = false;
 		if ((!BackMode) && (PressAuto()))
 			AutoMode = !AutoMode;
 		if (AutoMode)
@@ -140,7 +144,9 @@ public class GameManaging : MonoBehaviour {
 
 	static public IEnumerator PushText(string s)
 	{
+		bool isAnim = true;
 		int TextInterval = 0;
+		int LastSym = 0;
 		CanDoNext = false;
 		Text = "     ";
 		int StartTextLength = Text.Length;
@@ -148,17 +154,27 @@ public class GameManaging : MonoBehaviour {
 		targetText = Text + s;
 		while (Text.Length<targetText.Length) {
 			TextInterval++;
-			if (TextInterval>=Settings.TextSpeed)
+			if (TextInterval*Time.deltaTime>=Settings.TextSpeed)
 			{
-				Text += targetText[Text.Length];
+				if ((targetText[Text.Length]==' ') && (TextForm.GetComponent<TextForm>().TextStyle.CalcSize(new GUIContent(Text.Substring(LastSym)+"    "+NextWord(targetText,Text.Length+1))).x>TextWidth))
+				{
+					//Debug.Log(Text.Substring(LastSym)+" "+NextWord(targetText,Text.Length+1));
+					//Debug.Log(TextForm.GetComponent<TextForm>().TextStyle.CalcSize(new GUIContent(Text.Substring(LastSym)+" "+NextWord(targetText,Text.Length+1))) + " | " + TextWidth);
+					Text += "\n";
+					LastSym = Text.Length;
+				}
+				else
+					Text += targetText[Text.Length];
 				TextInterval = 0;
 			}
 			if (((PressForward()) || (PressSkip())) && (Text.Length>StartTextLength + 1))
 			{
-				Text = targetText;
-				break;
+				//Text = targetText;
+				//break;
+				isAnim = false;
 			}
-			yield return null;
+			if (isAnim)
+				yield return null;
 		}
 		yield return null;
 		if (!AutoMode)
@@ -176,6 +192,8 @@ public class GameManaging : MonoBehaviour {
 	static public IEnumerator PushText(string s, string a)
 	{
 		int TextInterval = 0;
+		int LastSym = 0;
+		bool isAnim = true;
 		CanDoNext = false;
 		Text = "     ";
 		int StartTextLength = Text.Length;
@@ -183,17 +201,27 @@ public class GameManaging : MonoBehaviour {
 		targetText = Text + s;
 		while (Text.Length<targetText.Length) {
 			TextInterval++;
-			if (TextInterval>=Settings.TextSpeed)
+			if (TextInterval*Time.deltaTime>=Settings.TextSpeed)
 			{
-				Text += targetText[Text.Length];
+				if ((targetText[Text.Length]==' ') && (TextForm.GetComponent<TextForm>().TextStyle.CalcSize(new GUIContent(Text.Substring(LastSym)+"    "+NextWord(targetText,Text.Length+1))).x>TextWidth))
+				{
+					//Debug.Log(Text.Substring(LastSym)+" "+NextWord(targetText,Text.Length+1));
+					//Debug.Log(TextForm.GetComponent<TextForm>().TextStyle.CalcSize(new GUIContent(Text.Substring(LastSym)+" "+NextWord(targetText,Text.Length+1))) + " | " + TextWidth);
+					Text += "\n";
+					LastSym = Text.Length;
+				}
+				else
+					Text += targetText[Text.Length];
 				TextInterval = 0;
 			}
 			if (((PressForward()) || (PressSkip())) && (Text.Length>StartTextLength + 1))
 			{
-				Text = targetText;
-				break;
+				//Text = targetText;
+				//break;
+				isAnim = false;
 			}
-			yield return null;
+			if (isAnim)
+				yield return null;
 		}
 		yield return null;
 		if (!AutoMode)
@@ -220,7 +248,7 @@ public class GameManaging : MonoBehaviour {
 			{
 				oldBackground.GetComponent<GUITexture>().color = new Color(0,0,0,0);
 			}
-			oldBackground.GetComponent<GUITexture>().color -= new Color(0,0,0,0.01f);
+			oldBackground.GetComponent<GUITexture>().color -= new Color(0,0,0,0.6f*Time.deltaTime);
 			yield return null;
 		}
 		CanDoNext = true;
@@ -237,7 +265,7 @@ public class GameManaging : MonoBehaviour {
 		bool SkipThis = false;
 		AudioStream Music = new AudioStream ("Sounds/Music/", false, Settings.MusicOn.GetHashCode ());
 		Music.Play ("Road From Nowhere");
-		float TextMoveSpeed = 0.00085f;
+		float TextMoveSpeed = 0.053f;
 		float TimeToShow = 3;
 		float fontSizeMulitplier = 0.15f;
 		GameObject obj = GameObject.FindGameObjectWithTag("Titres");
@@ -251,7 +279,7 @@ public class GameManaging : MonoBehaviour {
 		TitBack.GetComponent<GUITexture>().color = new Color (0, 0, 0, 0);
 		while (TitBack.GetComponent<GUITexture>().color.a<1)
 		{
-			TitBack.GetComponent<GUITexture>().color += new Color(0,0,0,FadeSpeed);
+			TitBack.GetComponent<GUITexture>().color += new Color(0,0,0,FadeSpeed*Time.deltaTime);
 			yield return null;
 		}
 		skp.SetActive (true);
@@ -259,7 +287,7 @@ public class GameManaging : MonoBehaviour {
 		thebackground.GetComponent<GUITexture>().texture = Resources.Load<Texture>(BackgroundPath + initialBackground);
 		while (obj.GetComponent<GUIText>().GetScreenRect().min.y<Screen.height)
 		{
-			obj.transform.position += new Vector3(0, TextMoveSpeed, 0);
+			obj.transform.position += new Vector3(0, TextMoveSpeed*Time.deltaTime, 0);
 			if (Click.OnClick(skp.GetComponent<GUITexture>()))
 			{
 				SkipThis = true;
@@ -271,12 +299,12 @@ public class GameManaging : MonoBehaviour {
 			Music.Stop();
 		while ((SkipThis) && (obj.GetComponent<GUIText>().color.a>0))
 		{
-			obj.GetComponent<GUIText>().color -= new Color(0,0,0,FadeSpeed);
+			obj.GetComponent<GUIText>().color -= new Color(0,0,0,FadeSpeed*Time.deltaTime);
 			yield return null;
 		}
 		while ((SkipThis) && (TitBack.GetComponent<GUITexture>().color.a>0))
 		{
-			TitBack.GetComponent<GUITexture>().color -= new Color(0,0,0,FadeSpeed);
+			TitBack.GetComponent<GUITexture>().color -= new Color(0,0,0,FadeSpeed*Time.deltaTime);
 			yield return null;
 		}
 		skp.SetActive (false);
@@ -293,19 +321,19 @@ public class GameManaging : MonoBehaviour {
 			DayText.GetComponent<GUIText>().text = "К О Н Е Ц";
 			while (DayText.GetComponent<GUIText>().color.a<1)
 			{
-				DayText.GetComponent<GUIText>().color += new Color(0,0,0,FadeSpeed);
+				DayText.GetComponent<GUIText>().color += new Color(0,0,0,FadeSpeed*Time.deltaTime);
 				yield return null;
 			}
 			yield return new WaitForSeconds(TimeToShow);
 			Music.Stop ();
 			while (DayText.GetComponent<GUIText>().color.a>0)
 			{
-				DayText.GetComponent<GUIText>().color -= new Color(0,0,0,FadeSpeed);
+				DayText.GetComponent<GUIText>().color -= new Color(0,0,0,FadeSpeed*Time.deltaTime);
 				yield return null;
 			}
 			while (TitBack.GetComponent<GUITexture>().color.a>0)
 			{
-				TitBack.GetComponent<GUITexture>().color -= new Color(0,0,0,FadeSpeed);
+				TitBack.GetComponent<GUITexture>().color -= new Color(0,0,0,FadeSpeed*Time.deltaTime);
 				yield return null;
 			}
 			Destroy (DayText);
@@ -328,7 +356,7 @@ public class GameManaging : MonoBehaviour {
 		DayBack.GetComponent<GUITexture>().color = new Color (0, 0, 0, 0);
 		while (DayBack.GetComponent<GUITexture>().color.a<1)
 		{
-			DayBack.GetComponent<GUITexture>().color += new Color(0,0,0,FadeSpeed);
+			DayBack.GetComponent<GUITexture>().color += new Color(0,0,0,FadeSpeed*Time.deltaTime);
 			yield return null;
 		}
 		GameObject DayText = new GameObject ("daytext", typeof(GUIText));
@@ -342,19 +370,19 @@ public class GameManaging : MonoBehaviour {
 		DayText.GetComponent<GUIText>().text = whattoshow;
 		while (DayText.GetComponent<GUIText>().color.a<1)
 		{
-			DayText.GetComponent<GUIText>().color += new Color(0,0,0,FadeSpeed);
+			DayText.GetComponent<GUIText>().color += new Color(0,0,0,FadeSpeed*Time.deltaTime);
 			yield return null;
 		}
 		thebackground.GetComponent<GUITexture>().texture = Resources.Load<Texture>(BackgroundPath + initialBackground);
 		yield return new WaitForSeconds(TimeToShow);
 		while (DayText.GetComponent<GUIText>().color.a>0)
 		{
-			DayText.GetComponent<GUIText>().color -= new Color(0,0,0,FadeSpeed);
+			DayText.GetComponent<GUIText>().color -= new Color(0,0,0,FadeSpeed*Time.deltaTime);
 			yield return null;
 		}
 		while (DayBack.GetComponent<GUITexture>().color.a>0)
 		{
-			DayBack.GetComponent<GUITexture>().color -= new Color(0,0,0,FadeSpeed);
+			DayBack.GetComponent<GUITexture>().color -= new Color(0,0,0,FadeSpeed*Time.deltaTime);
 			yield return null;
 		}
 		CanDoNext = true;
@@ -364,21 +392,21 @@ public class GameManaging : MonoBehaviour {
 
 	static public IEnumerator Flashing()
 	{
-		float FlashSpeed = 0.01f;
+		float FlashSpeed = 0.5f;
 		if (PressSkip ())
-			FlashSpeed = 0.05f;
+			FlashSpeed = 2.5f;
 		CanDoNext = false;
 		oldBackground.GetComponent<GUITexture>().color = new Color (0, 0, 0, 0);
 		while (oldBackground.GetComponent<GUITexture>().color.a<0.5f) 
 		{
-			oldBackground.GetComponent<GUITexture>().color += new Color(0,0,0,FlashSpeed);
+			oldBackground.GetComponent<GUITexture>().color += new Color(0,0,0,FlashSpeed*Time.deltaTime);
 			yield return null;
 		}
 		oldBackground.GetComponent<GUITexture>().color = new Color (0, 0, 0, 0.5f);
 		yield return null;
 		while (oldBackground.GetComponent<GUITexture>().color.a > 0) 
 		{
-			oldBackground.GetComponent<GUITexture>().color -= new Color(0,0,0,FlashSpeed);
+			oldBackground.GetComponent<GUITexture>().color -= new Color(0,0,0,FlashSpeed*Time.deltaTime);
 			yield return null;
 		}
 		CanDoNext = true;
@@ -386,14 +414,14 @@ public class GameManaging : MonoBehaviour {
 
 	static public IEnumerator Flashing(string back)
 	{
-		float FlashSpeed = 0.01f;
+		float FlashSpeed = 0.5f;
 		if (PressSkip ())
-			FlashSpeed = 0.05f;
+			FlashSpeed = 2.5f;
 		CanDoNext = false;
 		oldBackground.GetComponent<GUITexture>().color = new Color (0, 0, 0, 0);
 		while (oldBackground.GetComponent<GUITexture>().color.a<0.5f) 
 		{
-			oldBackground.GetComponent<GUITexture>().color += new Color(0,0,0,FlashSpeed);
+			oldBackground.GetComponent<GUITexture>().color += new Color(0,0,0,FlashSpeed*Time.deltaTime);
 			yield return null;
 		}
 		oldBackground.GetComponent<GUITexture>().color = new Color (0, 0, 0, 0.5f);
@@ -401,7 +429,7 @@ public class GameManaging : MonoBehaviour {
 		yield return null;
 		while (oldBackground.GetComponent<GUITexture>().color.a > 0) 
 		{
-			oldBackground.GetComponent<GUITexture>().color -= new Color(0,0,0,FlashSpeed);
+			oldBackground.GetComponent<GUITexture>().color -= new Color(0,0,0,FlashSpeed*Time.deltaTime);
 			yield return null;
 		}
 		CanDoNext = true;
@@ -420,7 +448,7 @@ public class GameManaging : MonoBehaviour {
 		DayBack.GetComponent<GUITexture>().color = new Color (0, 0, 0, 0);
 		while (DayBack.GetComponent<GUITexture>().color.a<1)
 		{
-			DayBack.GetComponent<GUITexture>().color += new Color(0,0,0,FadeSpeed/5);
+			DayBack.GetComponent<GUITexture>().color += new Color(0,0,0,FadeSpeed*Time.deltaTime/5);
 			yield return null;
 		}
 		yield return new WaitForSeconds (WaitTime);
@@ -484,13 +512,25 @@ public class GameManaging : MonoBehaviour {
 
 	static IEnumerator WaitAuto(int tlength)
 	{
-		int time = 0;
-		while ((float)time/20<Settings.AutoTime + tlength*Settings.AutoMultiplier)
+		float time = 0;
+		while (time<Settings.AutoTime + tlength*Settings.AutoMultiplier)
 		{
-			time++;
+			time += Time.deltaTime;
 			if (((PressForward()) || (PressSkip()) || (PressAuto())) && (!BackMode))
 				break;
 			yield return null;
 		}
+	}
+
+	static string NextWord(string s, int k)
+	{
+		string cur = "";
+		int i = k;
+		while ((i<s.Length) && (s[i]!=' '))
+		{
+			cur+=s[i];
+			i++;
+		}
+		return cur;
 	}
 }

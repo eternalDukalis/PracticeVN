@@ -5,10 +5,10 @@ public class Actor {
 	public string Name;
 	public enum Side { Left, Right, Center};
 	public float Height = 1.5f;
-	static public float SpeedStep = 0.01f;
-	static public float FadeStep = 0.025f;
-	static private float MoveSpeed = 0.01f;
-	static private float ColorChangeSpeed = 0.025f;
+	static public float SpeedStep = 0.6f;
+	static public float FadeStep = 1.5f;
+	static private float MoveSpeed = 0.6f;
+	static private float ColorChangeSpeed = 1.5f;
 	static public string LocalPath = "Graphics/Sprites/";
 	
 	private string apath;
@@ -132,8 +132,8 @@ public class Actor {
 		MainSprite.transform.localScale = new Vector3 (Height*MainSprite.GetComponent<GUITexture>().texture.width*Screen.height/MainSprite.GetComponent<GUITexture>().texture.height/Screen.width, Height, 0);
 		EmotionSprite.transform.localScale = new Vector3 (1, (float)MainSprite.GetComponent<GUITexture>().texture.width/MainSprite.GetComponent<GUITexture>().texture.height, 0);
 		while (MainSprite.GetComponent<GUITexture>().color.a<0.5f) {
-			MainSprite.GetComponent<GUITexture>().color += new Color(0,0,0,ColorChangeSpeed);
-			EmotionSprite.GetComponent<GUITexture>().color += new Color(0,0,0,ColorChangeSpeed);
+			MainSprite.GetComponent<GUITexture>().color += new Color(0,0,0,ColorChangeSpeed*Time.deltaTime);
+			EmotionSprite.GetComponent<GUITexture>().color += new Color(0,0,0,ColorChangeSpeed*Time.deltaTime);
 			yield return null;
 		}
 		yield return null;
@@ -182,8 +182,8 @@ public class Actor {
 		Direction = 1;
 		if (finalPosition < MainSprite.transform.position.x)
 			Direction = -1;
-		while (Mathf.Abs(finalPosition-MainSprite.transform.position.x)>MoveSpeed) {
-			MainSprite.transform.position += new Vector3(Direction*MoveSpeed,0,0);
+		while (Mathf.Abs(finalPosition-MainSprite.transform.position.x)>MoveSpeed*Time.deltaTime) {
+			MainSprite.transform.position += new Vector3(Direction*MoveSpeed*Time.deltaTime,0,0);
 			yield return null;
 		}
 	}
@@ -192,8 +192,8 @@ public class Actor {
 	{
 		if (isActive) {
 			while (MainSprite.GetComponent<GUITexture>().color.a>0) {
-				MainSprite.GetComponent<GUITexture>().color -= new Color(0,0,0,ColorChangeSpeed);
-				EmotionSprite.GetComponent<GUITexture>().color -= new Color(0,0,0,ColorChangeSpeed*2);
+				MainSprite.GetComponent<GUITexture>().color -= new Color(0,0,0,ColorChangeSpeed*Time.deltaTime);
+				EmotionSprite.GetComponent<GUITexture>().color -= new Color(0,0,0,ColorChangeSpeed*2*Time.deltaTime);
 				yield return null;
 			}
 			MonoBehaviour.Destroy (MainSprite);
@@ -220,9 +220,9 @@ public class Actor {
 			Direction = 1;
 			if (finalPosition < MainSprite.transform.position.x)
 				Direction = -1;
-			while (Mathf.Abs(finalPosition-MainSprite.transform.position.x)>MoveSpeed) {
-				MainSprite.transform.position += new Vector3(Direction*MoveSpeed,0,0);
-				EmotionSprite.transform.position += new Vector3(Direction*MoveSpeed,0,0);
+			while (Mathf.Abs(finalPosition-MainSprite.transform.position.x)>MoveSpeed*Time.deltaTime) {
+				MainSprite.transform.position += new Vector3(Direction*MoveSpeed*Time.deltaTime,0,0);
+				EmotionSprite.transform.position += new Vector3(Direction*MoveSpeed*Time.deltaTime,0,0);
 				yield return null;
 			}
 			MonoBehaviour.Destroy (MainSprite);
@@ -249,8 +249,8 @@ public class Actor {
 		Direction = 1;
 		if (finalPosition < MainSprite.transform.position.x)
 			Direction = -1;
-		while (Mathf.Abs(finalPosition-MainSprite.transform.position.x)>MoveSpeed) {
-			MainSprite.transform.position += new Vector3(Direction*MoveSpeed,0,0);
+		while (Mathf.Abs(finalPosition-MainSprite.transform.position.x)>MoveSpeed*Time.deltaTime) {
+			MainSprite.transform.position += new Vector3(Direction*MoveSpeed*Time.deltaTime,0,0);
 			yield return null;
 		}
 	}

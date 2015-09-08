@@ -8,7 +8,7 @@ public class AudioStream {
 	string spath;
 	float thevol;
 
-	static public float FadeOutSpeed = 0.01f;
+	static public float FadeOutSpeed = 0.6f;
 	static public GameManaging gm;
 	public AudioStream()
 	{
@@ -60,7 +60,7 @@ public class AudioStream {
 	{
 		while (currentStream.GetComponent<AudioSource>().volume>0) 
 		{
-			currentStream.GetComponent<AudioSource>().volume -= FadeOutSpeed;
+			currentStream.GetComponent<AudioSource>().volume -= FadeOutSpeed*Time.deltaTime;
 			yield return null;
 		}
 		MonoBehaviour.Destroy (currentStream);

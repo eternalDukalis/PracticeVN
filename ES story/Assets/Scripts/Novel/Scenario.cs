@@ -94,7 +94,7 @@ public class Scenario : MonoBehaviour {
 	AudioStream Music;
 	AudioStream Effects;
 	#endregion
-	static public int CurrentLevel = 7;
+	static public int CurrentLevel = 1;
 	static public int MaxLevel = 0;
 	void Start () {
 		Stars = "stars";
